@@ -87,7 +87,7 @@ public class GoDescLoader {
 
 				arrayLineFile = str.split("\t");
 
-				goDesc.put(arrayLineFile[2], arrayLineFile[9]);
+				goDesc.put(arrayLineFile[2], arrayLineFile[3]+"\t"+arrayLineFile[9]);
 
 			}
 
