@@ -258,7 +258,7 @@ public class MatrixLoader {
 
 
 	}
-	
+	//this methos excludes 0 from the calculation mean sd etc
 	public void operRowsNoParamSimple(double [][] dataMatrix){
 
 		ArrayList<Double> actualValues = new ArrayList<>(); 
@@ -300,6 +300,57 @@ public class MatrixLoader {
 
 		
 			actualValues.clear();
+			
+			
+			
+		}	
+
+
+
+
+	}
+	
+	//this method includes 0 in the calculations but still count the numbers of 0s in the numvalid elements !!carefull!!
+	public void operRowsNoParamSimpleNumbers0(double [][] dataMatrix){
+
+		ArrayList<Double> actualValues = new ArrayList<>(); 
+
+		int i = 0;
+		int j = 0;
+
+		DataItem itemTmp=null;
+		int num0=0;
+
+		for(i=0;i<labelRows.size();i++){
+			for(j=0;j<labelColumns.size();j++){
+
+				
+				if(dataMatrix[i][j]==0){
+					num0++;
+				}
+				actualValues.add(dataMatrix[i][j]);
+
+			}	
+
+			stat.setData(actualValues.toArray(new Double[actualValues.size()]));
+
+			itemTmp = new DataItem();
+			itemTmp.setAvgValidElements(stat.getMean());
+			itemTmp.setNumValidElements(num0);
+			itemTmp.setSumValidElements(stat.getSum());
+			itemTmp.setTotalElements(labelColumns.size());
+			itemTmp.setStdDev(stat.getStdDev());
+			itemTmp.setCoeVar(stat.getCV());
+			
+			
+			
+
+
+			rowItemsStats.put(labelRows.get(i), itemTmp);
+
+		
+			actualValues.clear();
+			num0=0;
 			
 			
 			

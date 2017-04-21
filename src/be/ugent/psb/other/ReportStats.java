@@ -24,7 +24,10 @@ public class ReportStats {
 		try(PrintWriter outFile = new PrintWriter(new FileOutputStream(fileOut))){
 			dataMatrix = matla.loadMatrixWithHeaderXY(fileIn);
 			
-			matla.operRowsNoParamSimpleWith0(dataMatrix);
+//			matla.operRowsNoParamSimpleWith0(dataMatrix);
+			matla.operRowsNoParamSimpleNumbers0(dataMatrix);
+			
+			
 //			matla.operColsNoParamSimple(dataMatrix);
 //			matla.operRowsNoParamSimple(dataMatrix);
 			
