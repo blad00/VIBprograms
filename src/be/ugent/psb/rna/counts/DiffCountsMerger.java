@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,11 +67,11 @@ public class DiffCountsMerger {
 								continue;
 								
 							if(!allCountxSample.containsKey(geneName)){
-								tmpCont = new ArrayList<>();
+								tmpCont = new ArrayList<>(Collections.nCopies(listFiles.size(), "0"));
 								allCountxSample.put(geneName, tmpCont);
 							}
 							tmpCont = allCountxSample.get(geneName);
-							tmpCont.add(arLine[arLine.length-1]);
+							tmpCont.set(i,arLine[arLine.length-1]);
 
 						}
 						inFileExpTable.close();
@@ -79,7 +80,9 @@ public class DiffCountsMerger {
 					outFile = new PrintWriter(new FileOutputStream(pathSamples+"/"+strSample+"allCounts.tsv"));
 					printCombine(allCountxSample, filesName, outFile);
 					outFile.close();
+					//comment next line if you want all counts together
 					allCountxSample.clear();
+					filesName.clear();
 					
 				}catch (Exception e) {
 					// TODO: handle exception
@@ -103,7 +106,7 @@ public class DiffCountsMerger {
 		int i=0;
 		String geneName;
 		ArrayList<String> info;
-		
+		outFile.print("GeneName\t");
 		
 		for(i=0;i<titles.size();i++){
 			outFile.print(titles.get(i)+"\t");
@@ -141,7 +144,7 @@ public class DiffCountsMerger {
 	
 	public static String cleanName(String orgName){
 		
-		String newName = orgName.replace("transcript:", "").replace(".1","").replace("gene:","");
+		String newName = orgName.replace("transcript:", "").replace(".1","").replace("gene:","").replace(".2","").replace(".3","");
 		return newName;
 		
 	}
