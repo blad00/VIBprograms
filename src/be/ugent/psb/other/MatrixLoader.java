@@ -336,15 +336,13 @@ public class MatrixLoader {
 
 			itemTmp = new DataItem();
 			itemTmp.setAvgValidElements(stat.getMean());
-			itemTmp.setNumValidElements(num0);
+			itemTmp.setNumValidElements(stat.getSize()-num0);
 			itemTmp.setSumValidElements(stat.getSum());
 			itemTmp.setTotalElements(labelColumns.size());
 			itemTmp.setStdDev(stat.getStdDev());
 			itemTmp.setCoeVar(stat.getCV());
+//			itemTmp.setNumValidElements(stat.getSize());
 			
-			
-			
-
 
 			rowItemsStats.put(labelRows.get(i), itemTmp);
 
