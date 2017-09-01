@@ -10,6 +10,7 @@ public class DataItem {
 	private int totalElements;
 	private int numInList1;
 	private int numInList2;
+	private int num0;
 	
 	private double StdDev;
 	private double coeVar;
@@ -69,6 +70,12 @@ public class DataItem {
 	public void setDataName(String dataName) {
 		this.dataName = dataName;
 	}*/
+	public int getNum0() {
+		return num0;
+	}
+	public void setNum0(int num0) {
+		this.num0 = num0;
+	}
 	
 	
 

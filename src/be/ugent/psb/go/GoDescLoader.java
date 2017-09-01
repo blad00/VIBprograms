@@ -13,6 +13,84 @@ import java.util.Iterator;
 public class GoDescLoader {
 
 	public static void main(String[] args) {
+		/*
+		 * /home/dfcruz/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/filesV3/go-basic.obo
+/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/TMP/GetAnotDesc/list.tsv
+plazaNoConvert
+/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/filesV3/go.zma.txt
+		 */
+		
+		
+		try {
+			HashMap<Integer, GoTerm> ontology = loadOntology(args[0]);
+			System.out.println(ontology.isEmpty());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public static HashMap<Integer, GoTerm> loadAnnotation(String annotFile) throws Exception, IOException{
+
+		String str = null;
+		String[] arrayLineFile;
+		HashMap<String, ArrayList<AnnotationDetail>> annots = new HashMap<>();
+		
+		try(BufferedReader inFile = new BufferedReader(new FileReader(annotFile))){
+			//skip header
+			inFile.readLine();
+			while ((str = inFile.readLine()) != null) {
+
+				
+			}
+		}
+		
+		return null;
+	}
+
+	public static HashMap<Integer, GoTerm> loadOntology(String ontologyFile) throws Exception, IOException{
+		String str = null;
+		
+		String[] arrayLineFile;
+		HashMap<Integer, GoTerm> goTerms = new HashMap<>();
+		int id;
+		String name;
+		String namespace;
+		try(BufferedReader inFile = new BufferedReader(new FileReader(ontologyFile))){
+			while ((str = inFile.readLine()) != null) {
+				
+				if(str.equalsIgnoreCase("[Term]")){
+					GoTerm gotem = new GoTerm();
+					//ID
+					str = inFile.readLine();
+					arrayLineFile = str.split(":");
+					id = Integer.parseInt(arrayLineFile[2]);
+					gotem.setId(id);
+					//name
+					str = inFile.readLine();
+					arrayLineFile = str.split(":");
+					name = arrayLineFile[1].replaceFirst("\\s+","");
+					gotem.setName(name);
+					//namespace
+					str = inFile.readLine();
+					arrayLineFile = str.split(":");
+					namespace = arrayLineFile[1].replaceFirst("\\s+","");
+					gotem.setNameSpace(namespace);
+					
+					goTerms.put(id, gotem);
+				}
+			}
+		}
+		
+		return goTerms;
+	}
+	
+	public static void main2(String[] args) {
 		// Arg 0 Gene List file
 		// Arg 1 Source: plaza, phyto, plazaNoConvert
 		// Arg 2 source file
@@ -45,7 +123,9 @@ public class GoDescLoader {
 		}
 
 	}
-
+	
+	
+	
 
 	public static void addPhyto(ArrayList<String> geneList, String phytoFile, String outputFile){
 
@@ -104,6 +184,10 @@ public class GoDescLoader {
 
 
 	}
+	
+	
+	
+	
 
 	public static void addPlaza(ArrayList<String> geneList, String plazaFile, String outputFile, 
 			String plazaIndexFile, int inputIndex, int outputIndex){
