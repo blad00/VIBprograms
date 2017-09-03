@@ -13,6 +13,135 @@ import java.util.Iterator;
 public class GoDescLoader {
 
 	public static void main(String[] args) {
+		/*
+		 * /home/dfcruz/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/filesV3/go-basic.obo
+/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/TMP/GetAnotDesc/list.tsv
+plazaNoConvert
+/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/filesV3/go.zma.txt
+		 */
+		
+		
+		try {
+			
+			HashMap<String, ArrayList<AnnotationDetail>> notat = loadAnnotation(args[0]);
+			System.out.println(notat.isEmpty());
+			
+			HashMap<Integer, GoTerm> ontology = loadOntology(args[1]);
+			System.out.println(ontology.isEmpty());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public static HashMap<String, ArrayList<AnnotationDetail>> loadAnnotation(String annotFile) throws Exception, IOException{
+
+		String str = null;
+		String[] arrayLineFile;
+		String[] arrayLineFileOpt;
+		HashMap<String, ArrayList<AnnotationDetail>> annots = new HashMap<>();
+		AnnotationDetail annota = null;
+		
+		String gene_id = "";
+		int go;
+		boolean is_shown;
+		String desc;
+		
+		ArrayList<AnnotationDetail> details = new ArrayList<>();
+		
+		try(BufferedReader inFile = new BufferedReader(new FileReader(annotFile))){
+			//skip header
+			inFile.readLine();
+			while ((str = inFile.readLine()) != null) {
+				arrayLineFile=str.split("\t");
+				
+			
+				
+				if(arrayLineFile[2].equalsIgnoreCase(gene_id)){
+					details.add(annota);
+				}else{
+					if(!gene_id.equals("")){
+						details.add(annota);
+						annots.put(gene_id, details);
+						details = new ArrayList<>();
+					}	
+				}
+				
+				
+				annota = new AnnotationDetail();
+				//gene id
+				gene_id = arrayLineFile[2];
+								
+				annota.setGene_id(gene_id);
+				
+				//go_id
+				arrayLineFileOpt = arrayLineFile[3].split(":");
+				go = Integer.parseInt(arrayLineFileOpt[1]);
+				annota.setGo(go);
+				
+				//is_shown
+				is_shown = arrayLineFile[8].equals("1");
+				annota.setIs_shown(is_shown);
+				
+				//desc
+				desc = arrayLineFile[9];
+				annota.setDesc(desc);
+				
+				
+					
+			}
+			details.add(annota);
+			annots.put(gene_id, details);
+			
+			
+		}
+		
+		return annots;
+	}
+
+	public static HashMap<Integer, GoTerm> loadOntology(String ontologyFile) throws Exception, IOException{
+		String str = null;
+		
+		String[] arrayLineFile;
+		HashMap<Integer, GoTerm> goTerms = new HashMap<>();
+		int id;
+		String name;
+		String namespace;
+		try(BufferedReader inFile = new BufferedReader(new FileReader(ontologyFile))){
+			while ((str = inFile.readLine()) != null) {
+				
+				if(str.equalsIgnoreCase("[Term]")){
+					GoTerm gotem = new GoTerm();
+					//ID
+					str = inFile.readLine();
+					arrayLineFile = str.split(":");
+					id = Integer.parseInt(arrayLineFile[2]);
+					gotem.setId(id);
+					//name
+					str = inFile.readLine();
+					arrayLineFile = str.split(":");
+					name = arrayLineFile[1].replaceFirst("\\s+","");
+					gotem.setName(name);
+					//namespace
+					str = inFile.readLine();
+					arrayLineFile = str.split(":");
+					namespace = arrayLineFile[1].replaceFirst("\\s+","");
+					gotem.setNameSpace(namespace);
+					
+					goTerms.put(id, gotem);
+				}
+			}
+		}
+		
+		return goTerms;
+	}
+	
+	public static void main2(String[] args) {
 		// Arg 0 Gene List file
 		// Arg 1 Source: plaza, phyto, plazaNoConvert
 		// Arg 2 source file
@@ -45,7 +174,9 @@ public class GoDescLoader {
 		}
 
 	}
-
+	
+	
+	
 
 	public static void addPhyto(ArrayList<String> geneList, String phytoFile, String outputFile){
 
@@ -78,6 +209,12 @@ public class GoDescLoader {
 	
 	public static void addPlazaNoConverter(ArrayList<String> geneList, String plazaFile, String outputFile){
 
+		/*
+		 * D:\DanielVIB\Maize\Annotations\Enzymes_C4.txt
+plazaNoConvert
+\\psb.ugent.be\shares\biocomp\groups\group_esb\dacru\maizeEnrich\filesV3\go.zma.txt
+		 */
+		
 		String str;
 		String[] arrayLineFile;
 		HashMap<String, String> goDesc = new HashMap<>();
@@ -104,6 +241,10 @@ public class GoDescLoader {
 
 
 	}
+	
+	
+	
+	
 
 	public static void addPlaza(ArrayList<String> geneList, String plazaFile, String outputFile, 
 			String plazaIndexFile, int inputIndex, int outputIndex){
