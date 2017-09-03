@@ -22,12 +22,60 @@ plazaNoConvert
 		
 		
 		try {
+
+			loadShownAnnotation(args[0], args[1], args[2]);
 			
-			HashMap<String, ArrayList<AnnotationDetail>> notat = loadAnnotation(args[0]);
-			System.out.println(notat.isEmpty());
+//			HashMap<String, ArrayList<AnnotationDetail>> notat = loadAnnotation(args[0]);
+//			System.out.println(notat.isEmpty());
+//			
+//			HashMap<Integer, GoTerm> ontology = loadOntology(args[1]);
+//			System.out.println(ontology.isEmpty());
+		
+			// TODO Auto-generated catch block
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public static void loadShownAnnotation(String geneListFilePath, String ontologyFilePath,String annotFilePath){
+		
+		try {
+			HashMap<Integer, GoTerm> ontology = loadOntology(ontologyFilePath);
+			HashMap<String, ArrayList<AnnotationDetail>> notat = loadAnnotation(annotFilePath);
 			
-			HashMap<Integer, GoTerm> ontology = loadOntology(args[1]);
-			System.out.println(ontology.isEmpty());
+			String str;
+			ArrayList<AnnotationDetail> annoTmp = null;
+			GoTerm got = null;
+
+			try(BufferedReader inFile = new BufferedReader(new FileReader(geneListFilePath));
+					PrintWriter outFile = new PrintWriter(new FileOutputStream(geneListFilePath+".Plazaout"))){
+				
+				outFile.println("GeneName"+"\t"+"Desc"+"\t"+"Go"+"\t"+"GoName"+"\t"+"NameSpace");
+				
+				while ((str = inFile.readLine()) != null) {
+
+					annoTmp = notat.get(str);
+					if(annoTmp!=null){
+						//check only the shown ones
+						for (AnnotationDetail annoDetail : annoTmp) {
+							if(annoDetail.isIs_shown()){
+								got = ontology.get(annoDetail.getGo());							
+								outFile.println(str+"\t"+annoDetail.getDesc()+"\t"+annoDetail.getGo()+"\t"+got.getName()+"\t"+got.getNameSpace());
+							}
+						}
+						
+					}
+
+				}
+			}
+			
+
+			
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,6 +83,7 @@ plazaNoConvert
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		
 		
 	}
