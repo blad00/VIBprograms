@@ -22,8 +22,60 @@ plazaNoConvert
 		
 		
 		try {
-			HashMap<Integer, GoTerm> ontology = loadOntology(args[0]);
-			System.out.println(ontology.isEmpty());
+
+			loadShownAnnotation(args[0], args[1], args[2]);
+			
+//			HashMap<String, ArrayList<AnnotationDetail>> notat = loadAnnotation(args[0]);
+//			System.out.println(notat.isEmpty());
+//			
+//			HashMap<Integer, GoTerm> ontology = loadOntology(args[1]);
+//			System.out.println(ontology.isEmpty());
+		
+			// TODO Auto-generated catch block
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public static void loadShownAnnotation(String geneListFilePath, String ontologyFilePath,String annotFilePath){
+		
+		try {
+			HashMap<Integer, GoTerm> ontology = loadOntology(ontologyFilePath);
+			HashMap<String, ArrayList<AnnotationDetail>> notat = loadAnnotation(annotFilePath);
+			
+			String str;
+			ArrayList<AnnotationDetail> annoTmp = null;
+			GoTerm got = null;
+
+			try(BufferedReader inFile = new BufferedReader(new FileReader(geneListFilePath));
+					PrintWriter outFile = new PrintWriter(new FileOutputStream(geneListFilePath+".Plazaout"))){
+				
+				outFile.println("GeneName"+"\t"+"Desc"+"\t"+"Go"+"\t"+"GoName"+"\t"+"NameSpace");
+				
+				while ((str = inFile.readLine()) != null) {
+
+					annoTmp = notat.get(str);
+					if(annoTmp!=null){
+						//check only the shown ones
+						for (AnnotationDetail annoDetail : annoTmp) {
+							if(annoDetail.isIs_shown()){
+								got = ontology.get(annoDetail.getGo());							
+								outFile.println(str+"\t"+annoDetail.getDesc()+"\t"+annoDetail.getGo()+"\t"+got.getName()+"\t"+got.getNameSpace());
+							}
+						}
+						
+					}
+
+				}
+			}
+			
+
+			
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -33,24 +85,72 @@ plazaNoConvert
 		}
 		
 		
+		
 	}
 	
-	public static HashMap<Integer, GoTerm> loadAnnotation(String annotFile) throws Exception, IOException{
+	public static HashMap<String, ArrayList<AnnotationDetail>> loadAnnotation(String annotFile) throws Exception, IOException{
 
 		String str = null;
 		String[] arrayLineFile;
+		String[] arrayLineFileOpt;
 		HashMap<String, ArrayList<AnnotationDetail>> annots = new HashMap<>();
+		AnnotationDetail annota = null;
+		
+		String gene_id = "";
+		int go;
+		boolean is_shown;
+		String desc;
+		
+		ArrayList<AnnotationDetail> details = new ArrayList<>();
 		
 		try(BufferedReader inFile = new BufferedReader(new FileReader(annotFile))){
 			//skip header
 			inFile.readLine();
 			while ((str = inFile.readLine()) != null) {
-
+				arrayLineFile=str.split("\t");
 				
+			
+				
+				if(arrayLineFile[2].equalsIgnoreCase(gene_id)){
+					details.add(annota);
+				}else{
+					if(!gene_id.equals("")){
+						details.add(annota);
+						annots.put(gene_id, details);
+						details = new ArrayList<>();
+					}	
+				}
+				
+				
+				annota = new AnnotationDetail();
+				//gene id
+				gene_id = arrayLineFile[2];
+								
+				annota.setGene_id(gene_id);
+				
+				//go_id
+				arrayLineFileOpt = arrayLineFile[3].split(":");
+				go = Integer.parseInt(arrayLineFileOpt[1]);
+				annota.setGo(go);
+				
+				//is_shown
+				is_shown = arrayLineFile[8].equals("1");
+				annota.setIs_shown(is_shown);
+				
+				//desc
+				desc = arrayLineFile[9];
+				annota.setDesc(desc);
+				
+				
+					
 			}
+			details.add(annota);
+			annots.put(gene_id, details);
+			
+			
 		}
 		
-		return null;
+		return annots;
 	}
 
 	public static HashMap<Integer, GoTerm> loadOntology(String ontologyFile) throws Exception, IOException{
@@ -158,6 +258,12 @@ plazaNoConvert
 	
 	public static void addPlazaNoConverter(ArrayList<String> geneList, String plazaFile, String outputFile){
 
+		/*
+		 * D:\DanielVIB\Maize\Annotations\Enzymes_C4.txt
+plazaNoConvert
+\\psb.ugent.be\shares\biocomp\groups\group_esb\dacru\maizeEnrich\filesV3\go.zma.txt
+		 */
+		
 		String str;
 		String[] arrayLineFile;
 		HashMap<String, String> goDesc = new HashMap<>();

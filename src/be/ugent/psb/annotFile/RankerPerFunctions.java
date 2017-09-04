@@ -10,7 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RankerPerFunctions {
-
+/*
+ * This program creates a consolidate from different predictions for each GO cat
+ */
 	public static void main2(String[] args) {
 		// TODO Auto-generated method stub
 		try(BufferedReader file0 = new BufferedReader(new FileReader("D:/DanielVIB/Maize/PredictGenes/PingORunComparison/CLR_allPlants_FDR_0.001_bingo0.01_Run/runFilter/GO3/CLR_0.001EnigmaFormatOnlyPos.txt.pgo"));
