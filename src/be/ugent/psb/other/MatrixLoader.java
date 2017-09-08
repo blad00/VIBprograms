@@ -508,6 +508,7 @@ public class MatrixLoader {
 		}
 		
 		//Titles
+		outFile.print("GeneName");
 		for (Method methodTmp : infoMethods) {
 			outFile.print("\t"+methodTmp.getName());
 		}
