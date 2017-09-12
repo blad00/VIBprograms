@@ -41,6 +41,62 @@ plazaNoConvert
 
 
 	}
+	
+	public static void loadShownAnnotPlusCommonNamePlusDesc(String geneListFilePath, String ontologyFilePath,String annotFilePath){
+		
+	}
+	
+	public static HashMap<String, GoID> loadIdentifiers(String idFile) throws Exception, IOException{
+
+		String str = null;
+		String[] arrayLineFile;
+		HashMap<String, GoID> goIds = new HashMap<>();
+		String plazaName="";
+		String name;
+		String commonName;
+		String pid;
+		String uniprot;
+		GoID goi = new GoID();
+		
+		try(BufferedReader inFile = new BufferedReader(new FileReader(idFile))){
+			//skip header
+			inFile.readLine();
+			while ((str = inFile.readLine()) != null) {
+				str = str.replaceAll("\"","");
+				arrayLineFile=str.split(";");
+				
+				if(!plazaName.equals(arrayLineFile))
+				
+				if(plazaName==null||plazaName.equals(arrayLineFile)){
+					plazaName = arrayLineFile[0];
+					
+					if(goi.getPlazaName()==null)
+						goi.setPlazaName(plazaName);
+			
+					if(arrayLineFile[1].equals("name"))
+						goi.setName(arrayLineFile[2]);
+										
+					if(arrayLineFile[1].equals("pid"))
+						goi.setPid(arrayLineFile[2]);
+					
+					if(arrayLineFile[1].equals("uniprot"))
+						goi.setUniprot(arrayLineFile[2]);
+					
+					if(arrayLineFile[1].equals("CommonName"))
+						goi.setCommonName(arrayLineFile[2]);
+					
+				}else{
+					goIds.put(goi.getName(), goi);
+					goi = new GoID();
+					
+				}
+				
+			}
+		
+		
+		}
+		return null;
+	}
 
 	public static void loadShownAnnotation(String geneListFilePath, String ontologyFilePath,String annotFilePath){
 
