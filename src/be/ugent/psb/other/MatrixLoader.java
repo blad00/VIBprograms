@@ -360,6 +360,55 @@ public class MatrixLoader {
 
 	}
 	
+	public void operRowsNoParamSimpleNumbersOtherInvalid(double [][] dataMatrix,double invalid){
+
+		ArrayList<Double> actualValues = new ArrayList<>(); 
+
+		int i = 0;
+		int j = 0;
+
+		DataItem itemTmp=null;
+		int num0=0;
+
+		for(i=0;i<labelRows.size();i++){
+			for(j=0;j<labelColumns.size();j++){
+
+				
+				if(dataMatrix[i][j]==invalid){
+					num0++;
+				}
+				actualValues.add(dataMatrix[i][j]);
+
+			}	
+
+			stat.setData(actualValues.toArray(new Double[actualValues.size()]));
+
+			itemTmp = new DataItem();
+			itemTmp.setAvgValidElements(stat.getMean());
+			itemTmp.setNumValidElements(stat.getSize()-num0);
+			itemTmp.setNum0(num0);
+			itemTmp.setSumValidElements(stat.getSum());
+			itemTmp.setTotalElements(labelColumns.size());
+			itemTmp.setStdDev(stat.getStdDev());
+			itemTmp.setCoeVar(stat.getCV());
+//			itemTmp.setNumValidElements(stat.getSize());
+			
+
+			rowItemsStats.put(labelRows.get(i), itemTmp);
+
+		
+			actualValues.clear();
+			num0=0;
+			
+			
+			
+		}	
+
+
+
+
+	}
+	
 	public void operRowsNoParamSimpleWith0(double [][] dataMatrix){
 
 		ArrayList<Double> actualValues = new ArrayList<>(); 

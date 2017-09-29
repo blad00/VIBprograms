@@ -25,7 +25,8 @@ public class ReportStats {
 			dataMatrix = matla.loadMatrixWithHeaderXY(fileIn);
 			
 //			matla.operRowsNoParamSimpleWith0(dataMatrix);
-			matla.operRowsNoParamSimpleNumbers0(dataMatrix);
+//			matla.operRowsNoParamSimpleNumbers0(dataMatrix);
+			matla.operRowsNoParamSimpleNumbersOtherInvalid(dataMatrix,Double.parseDouble(param));
 			
 			
 //			matla.operColsNoParamSimple(dataMatrix);

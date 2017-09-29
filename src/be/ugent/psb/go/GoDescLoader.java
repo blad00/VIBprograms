@@ -15,16 +15,27 @@ public class GoDescLoader {
 
 	public static void main(String[] args) {
 		/*
-		 * /home/dfcruz/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/filesV3/go-basic.obo
-/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/TMP/GetAnotDesc/list.tsv
-plazaNoConvert
-/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/filesV3/go.zma.txt
+		 * //this program takes a list of genes and adds different features such as Ids, descriptions and annotation.
+		 * Arg 0 folder with all the correlations
+		 * Arg 1 file with the pairs from CLR
+		 * Arg 2 output file
+		 *
+		 * /home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/TMP/GetAnotDesc/list.tsv
+			/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/filesV3/go-basic.obo
+			/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/filesV3/go.zma.txt
+			/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/filesV3/PlazaFilesDescCommonName/id_conversion.zma.csv
+			/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/filesV3/PlazaFilesDescCommonName/annotation_extra.zma.csv
+		 * 
 		 */
 
 
 		try {
 
-			loadShownAnnotation(args[0], args[1], args[2]);
+
+			loadShownAnnotPlusCommonNamePlusDesc(args[0], args[1], args[2],args[3],args[4]);
+			
+
+//			loadShownAnnotation(args[0], args[1], args[2]);
 
 			//			HashMap<String, ArrayList<AnnotationDetail>> notat = loadAnnotation(args[0]);
 			//			System.out.println(notat.isEmpty());
@@ -41,61 +52,211 @@ plazaNoConvert
 
 
 	}
-	
-	public static void loadShownAnnotPlusCommonNamePlusDesc(String geneListFilePath, String ontologyFilePath,String annotFilePath){
+
+	public static void loadShownAnnotPlusCommonNamePlusDesc(String geneListFilePath, String ontologyFilePath,String annotFilePath,String idFile, String annotExtraFile){
+		try {
+			HashMap<Integer, GoTerm> ontology = loadOntology(ontologyFilePath);
+			HashMap<String, ArrayList<AnnotationDetail>> notat = loadAnnotation(annotFilePath);
+			HashMap<String, GoID> ids = loadIdentifiers(idFile);
+			HashMap<String, ArrayList<String>> descripts = loadDescriptions(annotExtraFile);
 		
+			String str;
+			ArrayList<AnnotationDetail> annoTmp = null;
+			GoTerm got = null;
+			boolean multipleAnnot = false;
+			
+			String currPlazaName = null;
+			GoID goi;
+			ArrayList<String> descs;
+			
+			
+			try(BufferedReader inFile = new BufferedReader(new FileReader(geneListFilePath));
+					PrintWriter outFile = new PrintWriter(new FileOutputStream(geneListFilePath+"PlazaAnotout.tsv"))){
+
+				//outFile.println("GeneName"+"\t"+"Go"+"\t"+"GoName"+"\t"+"NameSpace");
+				outFile.println("Names"+"\t"+"Descs"+"\t"+"Go"+"\t"+"GoName"+"\t"+"NameSpace");
+
+				while ((str = inFile.readLine()) != null) {
+					//Print name as reference
+					outFile.print("Name:"+str);
+					
+					//first get others ids
+					goi = ids.get(str);
+					if(goi!=null){
+						if(goi.getPlazaName()!=null)
+							outFile.print(" "+"PlazaName:"+goi.getPlazaName());currPlazaName = goi.getPlazaName();
+						if(goi.getCommonName()!=null)
+							outFile.print(" "+"CommonName:"+goi.getCommonName());
+						if(goi.getUniprot()!=null)
+							outFile.print(" "+"Uniprot:"+goi.getUniprot());
+					}
+					goi=null;
+					
+					outFile.print("\t");
+						
+					//get descriptions
+					descs = descripts.get(currPlazaName);
+					if(descs!=null){
+						for (String sing : descs) {
+							outFile.print(sing+"~");
+						}
+					}
+					currPlazaName=null;
+					descs=null;
+					
+					
+					annoTmp = notat.get(str);
+
+					//check if there is any annotation
+					if(annoTmp!=null){
+
+
+						for (AnnotationDetail annoDetail : annoTmp) {
+							//check only the shown ones
+							if(annoDetail.isIs_shown()){
+								got = ontology.get(annoDetail.getGo());	
+								if(!multipleAnnot){
+									outFile.print("\t"+annoDetail.getGo()+"\t"+got.getName()+"\t"+got.getNameSpace());
+									// are there many?
+									if(annoTmp.size()>1)
+										multipleAnnot = true;
+								}else{
+									//for appending the rest
+									outFile.print("\t"+annoDetail.getGo()+"\t"+got.getName()+"\t"+got.getNameSpace());
+								}
+							}	
+						}
+						multipleAnnot = false;
+						outFile.println();
+
+
+					}else{
+						//there is no annotation
+						outFile.println("\t"+null+"\t"+null+"\t"+null);
+					}
+					annoTmp=null;
+
+				}
+			}
+
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
+
+	public static HashMap<String, ArrayList<String>> loadDescriptions(String descFile) throws Exception, IOException{
+		String str = null;
+		String[] arrayLineFile;
+		HashMap<String, ArrayList<String>> goDescs = new HashMap<>();
+		ArrayList<String> currentDescs;
+		String plazaName=null;
+		try(BufferedReader inFile = new BufferedReader(new FileReader(descFile))){
+			while ((str = inFile.readLine()) != null) {
+				str = str.replaceAll("\"","");
+				arrayLineFile=str.split(";");
+				plazaName = arrayLineFile[0];
+				//Get only interesting things
+
+				/*
+				 * Not included: 
+				 * name
+					pid
+					tid
+					GeneName
+
+					Inluded:
+					description
+					PlnTFDB
+					fatm_description
+					CommonName
+				 */
+
+				if(!arrayLineFile[2].equalsIgnoreCase("name")&&!arrayLineFile[2].equalsIgnoreCase("pid")&&!arrayLineFile[2].equalsIgnoreCase("tid")
+						&&!arrayLineFile[2].equalsIgnoreCase("GeneName")){
+
+
+					if(goDescs.containsKey(plazaName)){
+						currentDescs = goDescs.get(plazaName);
+						currentDescs.add(arrayLineFile[1]+":"+arrayLineFile[2]);
+					}else{
+						currentDescs =  new ArrayList<>();
+						currentDescs.add(arrayLineFile[1]+":"+arrayLineFile[2]);
+						goDescs.put(plazaName, currentDescs);
+					}
+				}	
+
+			}
+
+		}
+
+
+		return goDescs;
+	}
+
 	public static HashMap<String, GoID> loadIdentifiers(String idFile) throws Exception, IOException{
 
 		String str = null;
 		String[] arrayLineFile;
 		HashMap<String, GoID> goIds = new HashMap<>();
-		String plazaName="";
-		String name;
-		String commonName;
-		String pid;
-		String uniprot;
-		GoID goi = new GoID();
-		
+		String plazaName=null;
+		GoID goi = null;
+
 		try(BufferedReader inFile = new BufferedReader(new FileReader(idFile))){
 			//skip header
 			inFile.readLine();
 			while ((str = inFile.readLine()) != null) {
 				str = str.replaceAll("\"","");
 				arrayLineFile=str.split(";");
-				
-				if(!plazaName.equals(arrayLineFile))
-				
-				if(plazaName==null||plazaName.equals(arrayLineFile)){
+
+				//first gene
+				if(plazaName==null){
+					goi = new GoID();
 					plazaName = arrayLineFile[0];
-					
-					if(goi.getPlazaName()==null)
-						goi.setPlazaName(plazaName);
-			
-					if(arrayLineFile[1].equals("name"))
-						goi.setName(arrayLineFile[2]);
-										
-					if(arrayLineFile[1].equals("pid"))
-						goi.setPid(arrayLineFile[2]);
-					
-					if(arrayLineFile[1].equals("uniprot"))
-						goi.setUniprot(arrayLineFile[2]);
-					
-					if(arrayLineFile[1].equals("CommonName"))
-						goi.setCommonName(arrayLineFile[2]);
-					
-				}else{
+				}
+
+				//new gene
+				if(!plazaName.equals(arrayLineFile[0])){
 					goIds.put(goi.getName(), goi);
 					goi = new GoID();
-					
+					plazaName = arrayLineFile[0];
 				}
-				
+
+				//more of same gene
+				if(plazaName.equals(arrayLineFile[0])){
+
+
+					if(goi.getPlazaName()==null)
+						goi.setPlazaName(plazaName);
+
+					if(arrayLineFile[1].equals("name"))
+						goi.setName(arrayLineFile[2]);
+
+					if(arrayLineFile[1].equals("pid"))
+						goi.setPid(arrayLineFile[2]);
+
+					if(arrayLineFile[1].equals("uniprot"))
+						goi.setUniprot(arrayLineFile[2]);
+
+					if(arrayLineFile[1].equals("CommonName"))
+						goi.setCommonName(arrayLineFile[2]);
+
+				}
+
+
+
 			}
-		
-		
+
+			//final gene
+			goIds.put(goi.getName(), goi);
+
+
 		}
-		return null;
+		return goIds;
 	}
 
 	public static void loadShownAnnotation(String geneListFilePath, String ontologyFilePath,String annotFilePath){
@@ -109,7 +270,7 @@ plazaNoConvert
 			GoTerm got = null;
 			boolean multipleAnnot = false;
 			try(BufferedReader inFile = new BufferedReader(new FileReader(geneListFilePath));
-					PrintWriter outFile = new PrintWriter(new FileOutputStream(geneListFilePath+".PlazaAnotout"))){
+					PrintWriter outFile = new PrintWriter(new FileOutputStream(geneListFilePath+".PlazaAnotout.tsv"))){
 
 				outFile.println("GeneName"+"\t"+"Go"+"\t"+"GoName"+"\t"+"NameSpace");
 
@@ -126,7 +287,7 @@ plazaNoConvert
 							if(annoDetail.isIs_shown()){
 								got = ontology.get(annoDetail.getGo());	
 								if(!multipleAnnot){
-									outFile.print(str+"\t"+annoDetail.getGo()+"\t"+got.getName()+"\t"+got.getNameSpace());
+									outFile.print("\t"+annoDetail.getGo()+"\t"+got.getName()+"\t"+got.getNameSpace());
 									// are there many?
 									if(annoTmp.size()>1)
 										multipleAnnot = true;
