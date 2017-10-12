@@ -33,9 +33,9 @@ public class GoDescLoader {
 
 
 			loadShownAnnotPlusCommonNamePlusDesc(args[0], args[1], args[2],args[3],args[4]);
-			
 
-//			loadShownAnnotation(args[0], args[1], args[2]);
+
+			//			loadShownAnnotation(args[0], args[1], args[2]);
 
 			//			HashMap<String, ArrayList<AnnotationDetail>> notat = loadAnnotation(args[0]);
 			//			System.out.println(notat.isEmpty());
@@ -59,19 +59,19 @@ public class GoDescLoader {
 			HashMap<String, ArrayList<AnnotationDetail>> notat = loadAnnotation(annotFilePath);
 			HashMap<String, GoID> ids = loadIdentifiers(idFile);
 			HashMap<String, ArrayList<String>> descripts = loadDescriptions(annotExtraFile);
-		
+
 			String str;
 			ArrayList<AnnotationDetail> annoTmp = null;
 			GoTerm got = null;
 			boolean multipleAnnot = false;
-			
+
 			String currPlazaName = null;
 			GoID goi;
 			ArrayList<String> descs;
-			
-			
+
+
 			try(BufferedReader inFile = new BufferedReader(new FileReader(geneListFilePath));
-					PrintWriter outFile = new PrintWriter(new FileOutputStream(geneListFilePath+"PlazaAnotout.tsv"))){
+					PrintWriter outFile = new PrintWriter(new FileOutputStream(geneListFilePath+"PlazaAnotOut.tsv"))){
 
 				//outFile.println("GeneName"+"\t"+"Go"+"\t"+"GoName"+"\t"+"NameSpace");
 				outFile.println("Names"+"\t"+"Descs"+"\t"+"Go"+"\t"+"GoName"+"\t"+"NameSpace");
@@ -79,21 +79,20 @@ public class GoDescLoader {
 				while ((str = inFile.readLine()) != null) {
 					//Print name as reference
 					outFile.print("Name:"+str);
-					
 					//first get others ids
 					goi = ids.get(str);
 					if(goi!=null){
 						if(goi.getPlazaName()!=null)
 							outFile.print(" "+"PlazaName:"+goi.getPlazaName());currPlazaName = goi.getPlazaName();
-						if(goi.getCommonName()!=null)
-							outFile.print(" "+"CommonName:"+goi.getCommonName());
-						if(goi.getUniprot()!=null)
-							outFile.print(" "+"Uniprot:"+goi.getUniprot());
+							if(goi.getCommonName()!=null)
+								outFile.print(" "+"CommonName:"+goi.getCommonName());
+							if(goi.getUniprot()!=null)
+								outFile.print(" "+"Uniprot:"+goi.getUniprot());
 					}
 					goi=null;
-					
+
 					outFile.print("\t");
-						
+
 					//get descriptions
 					descs = descripts.get(currPlazaName);
 					if(descs!=null){
@@ -103,8 +102,8 @@ public class GoDescLoader {
 					}
 					currPlazaName=null;
 					descs=null;
-					
-					
+
+
 					annoTmp = notat.get(str);
 
 					//check if there is any annotation
@@ -114,15 +113,20 @@ public class GoDescLoader {
 						for (AnnotationDetail annoDetail : annoTmp) {
 							//check only the shown ones
 							if(annoDetail.isIs_shown()){
-								got = ontology.get(annoDetail.getGo());	
-								if(!multipleAnnot){
-									outFile.print("\t"+annoDetail.getGo()+"\t"+got.getName()+"\t"+got.getNameSpace());
-									// are there many?
-									if(annoTmp.size()>1)
-										multipleAnnot = true;
+								got = ontology.get(annoDetail.getGo());
+								if(got!=null){
+									if(!multipleAnnot){
+										outFile.print("\t"+annoDetail.getGo()+"\t"+got.getName()+"\t"+got.getNameSpace());
+										// are there many?
+										if(annoTmp.size()>1)
+											multipleAnnot = true;
+									}else{
+										//for appending the rest
+										outFile.print("\t"+annoDetail.getGo()+"\t"+got.getName()+"\t"+got.getNameSpace());
+									}
 								}else{
-									//for appending the rest
-									outFile.print("\t"+annoDetail.getGo()+"\t"+got.getName()+"\t"+got.getNameSpace());
+									//print missing cats
+									System.out.println(annoDetail.getGo());
 								}
 							}	
 						}
