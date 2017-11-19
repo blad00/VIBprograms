@@ -21,6 +21,7 @@ public class AnnotVersionMerger {
 	 * arg 1 file annot (source)
 	 * arg 2 id conversion file
 	 * arg 3 outputfile
+	 * arg 4 listTargetGenes
 	 */
 
 
@@ -54,7 +55,7 @@ public class AnnotVersionMerger {
 			}
 
 			//load inAnnot file
-			//skip header
+			//skip header Target
 			outFile.println(inAnnotTargetFile.readLine());
 			while ((str = inAnnotTargetFile.readLine()) != null) {
 				arrayLine = str.split("\t");
@@ -79,6 +80,8 @@ public class AnnotVersionMerger {
 			while ((str = inAnnotSourceFile.readLine()) != null) {
 				arrayLine = str.split("\t");
 				geneName = arrayLine[2];
+//				if(geneName.equals("GRMZM2G000964"))
+//					System.out.println("aaaaaaa");
 				//existing gene
 				if(annotSource.containsKey(geneName)){
 					mapTmp = annotSource.get(geneName);
@@ -96,6 +99,7 @@ public class AnnotVersionMerger {
 			//now comparison we are going to do it in the target order
 
 			int totalAdded = 0;
+			boolean allFromSource = false;
 			Iterator<Entry<String, String>> it;
 			String go;
 			String annotLine;
@@ -104,27 +108,33 @@ public class AnnotVersionMerger {
 
 			String plazaName;
 
-			BufferedReader inAnnotFile2 = new BufferedReader(new FileReader(args[0]));		
-			inAnnotFile2.readLine();
-			while ((str = inAnnotFile2.readLine()) != null) {
+			BufferedReader listGenes = new BufferedReader(new FileReader(args[4]));		
+			listGenes.readLine();
+			while ((str = listGenes.readLine()) != null) {
 				arrayLine = str.split("\t");
 
-				if(!geneName.equals(arrayLine[2])){
-					geneName = arrayLine[2];
+				if(!geneName.equals(arrayLine[1])){
+					geneName = arrayLine[1];
 
+
+					
 					//GO target
 					mapTarget = annotTarget.get(geneName);
 
-
-					//print all target Annots
-					it = mapTarget.entrySet().iterator();
-					while (it.hasNext()) {
-						HashMap.Entry<String,String> pair = it.next();
-						//go = pair.getKey();
-						annotLine = pair.getValue();
-//						it.remove(); // avoids a ConcurrentModificationException
-						outFile.println(annotLine);
-
+					if(mapTarget!=null){
+						//print all target Annots
+						it = mapTarget.entrySet().iterator();
+						while (it.hasNext()) {
+							HashMap.Entry<String,String> pair = it.next();
+							//go = pair.getKey();
+							annotLine = pair.getValue();
+	//						it.remove(); // avoids a ConcurrentModificationException
+							outFile.println(annotLine);
+	
+						}
+					}else{
+						// if the gene doesn't have anything in target
+						allFromSource = true;
 					}
 
 					//check source file
@@ -133,15 +143,21 @@ public class AnnotVersionMerger {
 
 					//GO source
 					mapSource = annotSource.get(plazaName);
-					if(mapSource==null)
+					
+//					System.out.println(geneName);
+					
+					if(mapSource==null){
+						allFromSource = false;
 						continue;
+					}	
 					//print missing Annots from source
 					it = mapSource.entrySet().iterator();
 					while (it.hasNext()) {
 						HashMap.Entry<String,String> pair = it.next();
 						go = pair.getKey();
 						annotLine = pair.getValue();
-						if(!mapTarget.containsKey(go)){
+						//checking that the source doesn't have already the same annot
+						if(mapTarget==null||!mapTarget.containsKey(go)){
 							annotLine = annotLine.replaceFirst(plazaName, geneName);
 							outFile.println(annotLine);
 							totalAdded++;
@@ -152,14 +168,15 @@ public class AnnotVersionMerger {
 
 					}
 
-					outFileCounts.println(geneName+"\t"+totalAdded);
+					outFileCounts.println(geneName+"\t"+totalAdded+"\t"+allFromSource);
 					totalAdded = 0;
+					allFromSource = false;
 
 				}
 
 			}
 
-			inAnnotFile2.close();
+			listGenes.close();
 
 
 		} catch (FileNotFoundException e) {

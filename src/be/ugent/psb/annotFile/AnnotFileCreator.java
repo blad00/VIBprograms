@@ -10,7 +10,7 @@ public class AnnotFileCreator {
 
 	/**
 	 * @param args
-	 * This program creates an Ontology file that can be used in PINGO, using the following parameters from PLAZA:
+	 * This program creates an annotation file that can be used in PINGO, using the following parameters from PLAZA:
 	 * Arg 0 functional Annotation file
 	 * Arg 1 Conversion IDs file
 	 * Arg 2 output file
