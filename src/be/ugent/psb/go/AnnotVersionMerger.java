@@ -103,6 +103,8 @@ public class AnnotVersionMerger {
 			Iterator<Entry<String, String>> it;
 			String go;
 			String annotLine;
+			
+			String [] forPub;
 
 			geneName = "";
 
@@ -110,6 +112,9 @@ public class AnnotVersionMerger {
 
 			BufferedReader listGenes = new BufferedReader(new FileReader(args[4]));		
 			listGenes.readLine();
+			
+			outFileCounts.println("GeneName	GenesFromSource	allFromSource");
+			
 			while ((str = listGenes.readLine()) != null) {
 				arrayLine = str.split("\t");
 
@@ -159,7 +164,19 @@ public class AnnotVersionMerger {
 						//checking that the source doesn't have already the same annot
 						if(mapTarget==null||!mapTarget.containsKey(go)){
 							annotLine = annotLine.replaceFirst(plazaName, geneName);
-							outFile.println(annotLine);
+							if(annotLine.contains("publications")){
+								forPub = annotLine.split("\t");
+								outFile.print(forPub[0]);
+								for(int i=1;i<forPub.length;i++){
+									if(i!=8)
+										outFile.print("\t"+forPub[i]);
+								}
+								outFile.println();
+								
+							}else{
+								outFile.println(annotLine);
+							}
+							
 							totalAdded++;
 						}
 
