@@ -63,7 +63,7 @@ public class AnnotVersionMergerMonoDIc {
 
 			//load inAnnot file
 			//skip header Target target V3
-			outFile.println(inAnnotTargetFile.readLine());
+			outFile.println(inAnnotTargetFile.readLine()+"\t"+"Origin");
 			while ((str = inAnnotTargetFile.readLine()) != null) {
 				arrayLine = str.split("\t");
 				geneName = arrayLine[2];
@@ -221,6 +221,20 @@ public class AnnotVersionMergerMonoDIc {
 								}
 								outFile.println();
 								V2MonoCounts++;
+							}else if(annotLine.contains("node_id")&&annotLine.contains("V2_Monocot")){
+								forPub = annotLine.split("\t");
+								outFile.print(forPub[0]);
+								for(int i=1;i<forPub.length;i++){
+									if(i==7){
+										outFile.print("\t"+forPub[7]+";"+forPub[8]+";"+forPub[9]);
+										i=9;
+									}else{
+										outFile.print("\t"+forPub[i]);
+									}
+								}
+								outFile.println();
+								V2MonoCounts++;
+								
 							}else{
 								outFile.println(annotLine);
 								V2MonoCounts++;
