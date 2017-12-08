@@ -214,8 +214,8 @@ public class GoDescLoader {
 			//skip header
 			inFile.readLine();
 			while ((str = inFile.readLine()) != null) {
-				str = str.replaceAll("\"","");
-				arrayLineFile=str.split(";");
+//				str = str.replaceAll("\"","");
+				arrayLineFile=str.split("\t");
 
 				//first gene
 				if(plazaName==null){
