@@ -22,13 +22,12 @@ public class KeywordReviewer {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		//printWithOutkeyWord(args[0], args[1]);
+		
 		try {
-			printWithManykeyWordsIndex(args);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+//			printWithManykeyWordsIndex(args);
+			printWithOutkeyWordIndex(args);
+		
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -75,9 +74,9 @@ public class KeywordReviewer {
 				}
 				arrayFile=str.split("\t");
 				
-				if(line==173){
-					System.out.println("aaaaaaaaaaaa");
-				}
+//				if(line==173){
+//					System.out.println("aaaaaaaaaaaa");
+//				}
 				
 				for(i=startIndex;i<arrayFile.length;i++){
 					descAnnot+=arrayFile[i];
@@ -127,16 +126,19 @@ public class KeywordReviewer {
 		
 	}
 	
-	public static void printWithOutkeyWord(String inPathfile, String keyWord){
+	public static void printWithOutkeyWordIndex(String[] args){
 		
 
-		try(BufferedReader inFile = new BufferedReader(new FileReader(inPathfile));
-				PrintWriter outFile = new PrintWriter(new FileOutputStream(inPathfile+"out.tsv"))){
+		try(BufferedReader inFile = new BufferedReader(new FileReader(args[0]));
+				PrintWriter outFile = new PrintWriter(new FileOutputStream(args[0]+"Wout.tsv"))){
 			
+			int startIndex = Integer.parseInt(args[1]);
 			
 			String str = null;
 			
-			
+			String arrayFile[];
+			String descAnnot = "";
+			int i;
 			boolean firstLine =true;
 			
 			
@@ -149,10 +151,17 @@ public class KeywordReviewer {
 					continue;
 				}
 				
-				if(!str.contains(keyWord)){
+				arrayFile=str.split("\t");
+				
+				for(i=startIndex;i<arrayFile.length;i++){
+					descAnnot+=arrayFile[i];
+				}
+				
+				if(!descAnnot.contains(args[2])){
 					outFile.println(str);
 				}
 				
+				descAnnot = "";
 			}
 			
 			
