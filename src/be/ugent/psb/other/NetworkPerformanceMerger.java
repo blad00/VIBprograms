@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 
 public class NetworkPerformanceMerger {
 	/**
-	 * This program will merge the process specific info 
+	 * This program will merge the process specific info from predictions made by PINGO 
 	 * @param args
 	 * arg 0 infile
 	 * arg 1 init index to search
@@ -19,7 +19,7 @@ public class NetworkPerformanceMerger {
 		try(BufferedReader inRec = new BufferedReader(new FileReader(args[0]+"ProcessesRecall.txt"));
 				BufferedReader inPrec = new BufferedReader(new FileReader(args[0]+"ProcessesPrecision.txt"));
 				BufferedReader inFmes = new BufferedReader(new FileReader(args[0]+"ProcessesFmeasure.txt"));
-				PrintWriter outFile = new PrintWriter(new FileOutputStream(args[1]+".tsv"))){
+				PrintWriter outFile = new PrintWriter(new FileOutputStream(args[0]+args[1]+".tsv"))){
 			
 			
 			String strRec,strPrec,strFmes = null;
@@ -52,14 +52,17 @@ public class NetworkPerformanceMerger {
 				
 				if(!hayRecall)
 					continue;
+								
+				outFile.print(args[1]+"\t"+"Recall"+"\t");
+				outFile.println(strRec);
 				
-				outFile.print(args[1]+"\t"+"Recall");
+				outFile.print(args[1]+"\t"+"Precision"+"\t");
+				outFile.println(strPrec);
 				
-				for(i = 0;i<arRec.length;i++){
-					outFile.print("\t"+arRec[i]);
-				}
-				outFile.println();
+				outFile.print(args[1]+"\t"+"Fmeasure"+"\t");
+				outFile.println(strFmes);
 				
+				hayRecall = false;
 			}
 			
 			
