@@ -427,6 +427,27 @@ public class GoDescLoader {
 
 		return goTerms;
 	}
+	
+	public static String contentGO(ArrayList<Integer> targetGOs, ArrayList<AnnotationDetail> annots) throws Exception{
+		
+//		int total2CheckGo = targetGOs.size();
+		String foundtargetGo = "";
+		
+		for (AnnotationDetail annoDetail : annots) {
+//			if(targetGOs.contains(annoDetail.getGo())){
+//				numFoundtargetGo++;
+//			}
+			for(Integer go : targetGOs){
+				if(go.intValue() == annoDetail.getGo())
+					foundtargetGo = foundtargetGo+"-"+annoDetail.getGo();
+			}
+			
+				
+		}
+		
+		return foundtargetGo;
+	}
+	
 
 	public static void main2(String[] args) {
 		// Arg 0 Gene List file

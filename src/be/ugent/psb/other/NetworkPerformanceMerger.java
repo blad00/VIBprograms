@@ -9,9 +9,9 @@ public class NetworkPerformanceMerger {
 	/**
 	 * This program will merge the process specific info from predictions made by PINGO 
 	 * @param args
-	 * arg 0 infile
-	 * arg 1 init index to search
-	 * arg 3... keywords
+	 * arg 0 folder with recall precision and fmeasure
+	 * arg 1 Network name
+
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
