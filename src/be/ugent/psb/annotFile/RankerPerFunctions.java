@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class RankerPerFunctions {
 /*
- * This program creates a consolidate from different predictions for each GO cat
+ * This program creates a consolidate ranking from different predictions for each GO cat
  */
 	public static void main2(String[] args) {
 		// TODO Auto-generated method stub
@@ -44,15 +44,15 @@ public class RankerPerFunctions {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-//		String goCats = "D:/DanielVIB/Maize/PredictGenes/PingORunComparison/GO-ID.txt";
-//		String dir1 = "D:/DanielVIB/Maize/PredictGenes/PingORunComparison/CLR_allPlants_FDR_0.001_bingo0.01_Run/runFilter/GO";
-//		String dir2 = "D:/DanielVIB/Maize/PredictGenes/PingORunComparison/Enigma_allPlants_FDR_0.001_bingo0.01_Run/runFilter/GO";
-//		String dir3 = "D:/DanielVIB/Maize/PredictGenes/PingORunComparison/Pearson_allPlants_corr0.7_bingo0.01_Run/runFilter/GO";
+		String goCats = "D:/DanielVIB/Maize/PredictGenes/PingORunComparison/GO-ID.txt";
+		String dir1 = "D:/DanielVIB/Maize/PredictGenes/PingORunComparison/CLR_allPlants_FDR_0.001_bingo0.01_Run/runFilter/GO";
+		String dir2 = "D:/DanielVIB/Maize/PredictGenes/PingORunComparison/Enigma_allPlants_FDR_0.001_bingo0.01_Run/runFilter/GO";
+		String dir3 = "D:/DanielVIB/Maize/PredictGenes/PingORunComparison/Pearson_allPlants_corr0.7_bingo0.01_Run/runFilter/GO";
 		
-		String goCats = "/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/GO-ID.txt";
-		String dir1 = "/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/CLR_allPlants_FDR_0.001_bingo0.01_Run/runFilter/GO";
-		String dir2 = "/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/Enigma_allPlants_FDR_0.001_bingo0.01_Run/runFilter/GO";
-		String dir3 = "/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/Pearson_allPlants_corr0.7_bingo0.01_Run/runFilter/GO";
+//		String goCats = "/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/GO-ID.txt";
+//		String dir1 = "/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/CLR_allPlants_FDR_0.001_bingo0.01_Run/runFilter/GO";
+//		String dir2 = "/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/Enigma_allPlants_FDR_0.001_bingo0.01_Run/runFilter/GO";
+//		String dir3 = "/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/Pearson_allPlants_corr0.7_bingo0.01_Run/runFilter/GO";
 		
 		String str;
 		
@@ -64,8 +64,8 @@ public class RankerPerFunctions {
 				BufferedReader file2 = new BufferedReader(new FileReader(dir2+str+"/AllPlantsENIGMA_FC.txt_filter0.001graphOnlyPos.pgo"));
 				BufferedReader file3 = new BufferedReader(new FileReader(dir3+str+"/corr_Graph_0.7.tsv.pgo"));
 				
-//				PrintWriter outFile = new PrintWriter(new FileOutputStream("D:/DanielVIB/Maize/PredictGenes/PingORunComparison/GO"+str+".tsv"));
-				PrintWriter outFile = new PrintWriter(new FileOutputStream("/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/merged/GO"+str+".tsv"));
+				PrintWriter outFile = new PrintWriter(new FileOutputStream("D:/DanielVIB/Maize/PredictGenes/PingORunComparison/GO"+str+".tsv"));
+//				PrintWriter outFile = new PrintWriter(new FileOutputStream("/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/merged/GO"+str+".tsv"));
 				
 				fil.add(file1);
 				fil.add(file2);

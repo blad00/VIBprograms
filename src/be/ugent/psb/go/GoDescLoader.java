@@ -439,7 +439,7 @@ public class GoDescLoader {
 //			}
 			for(Integer go : targetGOs){
 				if(go.intValue() == annoDetail.getGo())
-					foundtargetGo = foundtargetGo+"-"+annoDetail.getGo();
+					foundtargetGo = foundtargetGo+"~"+annoDetail.getGo();
 			}
 			
 				
