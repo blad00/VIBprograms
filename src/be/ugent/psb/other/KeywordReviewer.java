@@ -25,7 +25,8 @@ public class KeywordReviewer {
 		
 		try {
 //			printWithManykeyWordsIndex(args);
-			printWithOutkeyWordIndex(args);
+//			printWithOutkeyWordIndex(args);
+			printWithOutManykeyWordsIndex(args);
 		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -124,6 +125,67 @@ public class KeywordReviewer {
 			
 		}
 		
+	}
+	
+	public static void printWithOutManykeyWordsIndex(String[] args) throws FileNotFoundException, IOException{
+
+		try(BufferedReader inFile = new BufferedReader(new FileReader(args[0]));
+				PrintWriter outFile = new PrintWriter(new FileOutputStream(args[0]+"Wout.tsv"))){
+			
+			int startIndex = Integer.parseInt(args[1]);
+			
+			//get keywords
+			
+			int i;
+			
+			ArrayList<String> keywords = new ArrayList<>(); 
+			
+			for(i=2;i<args.length;i++){
+				keywords.add(args[i]);
+				
+			}
+			
+			String[] arrKeys = keywords.toArray(new String[keywords.size()]);
+			
+			String str = null;
+			String arrayFile[];
+			
+			boolean firstLine =true;
+			
+			String descAnnot = "";
+			
+			int line=0;
+			while ((str = inFile.readLine()) != null) {
+				
+				line++;
+				
+				//print header
+				if(firstLine){
+					outFile.println("WithOutWords"+"\t"+str);
+					firstLine = false;
+					continue;
+				}
+				arrayFile=str.split("\t");
+				
+//				if(line==173){
+//					System.out.println("aaaaaaaaaaaa");
+//				}
+				
+				for(i=startIndex;i<arrayFile.length;i++){
+					descAnnot+=arrayFile[i];
+				}
+				if(!stringContainsItemFromList(descAnnot,arrKeys)){
+					outFile.println("Yes"+"\t"+str);
+				}else{
+					outFile.println("No"+"\t"+str);
+				}
+				
+				descAnnot = "";
+			}
+			
+			
+		}
+
 	}
 	
 	public static void printWithOutkeyWordIndex(String[] args){
