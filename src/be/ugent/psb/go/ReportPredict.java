@@ -115,7 +115,7 @@ public class ReportPredict {
 						outFile.print(targetsFound);
 
 					}else{
-						outFile.print("No");
+						outFile.print("None");
 					}
 					
 					outFile.print("\t");

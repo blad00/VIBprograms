@@ -32,16 +32,11 @@ public class GoDescLoader {
 		try {
 
 
-			loadShownAnnotPlusCommonNamePlusDesc(args[0], args[1], args[2],args[3],args[4]);
+//			loadShownAnnotPlusCommonNamePlusDesc(args[0], args[1], args[2],args[3],args[4]);
+			loadShownAnnotPlusCommonNamePlusDescWithTargetGOs(args[0], args[1], args[2],args[3],args[4],args[5]);
 
 
-			//			loadShownAnnotation(args[0], args[1], args[2]);
-
-			//			HashMap<String, ArrayList<AnnotationDetail>> notat = loadAnnotation(args[0]);
-			//			System.out.println(notat.isEmpty());
-			//			
-			//			HashMap<Integer, GoTerm> ontology = loadOntology(args[1]);
-			//			System.out.println(ontology.isEmpty());
+			
 
 			// TODO Auto-generated catch block
 
@@ -105,6 +100,124 @@ public class GoDescLoader {
 
 
 					annoTmp = notat.get(str);
+
+					//check if there is any annotation
+					if(annoTmp!=null){
+
+
+						for (AnnotationDetail annoDetail : annoTmp) {
+							//check only the shown ones
+							if(annoDetail.isIs_shown()){
+								got = ontology.get(annoDetail.getGo());
+								if(got!=null){
+									if(!multipleAnnot){
+										outFile.print("\t"+annoDetail.getGo()+"\t"+got.getName()+"\t"+got.getNameSpace());
+										// are there many?
+										if(annoTmp.size()>1)
+											multipleAnnot = true;
+									}else{
+										//for appending the rest
+										outFile.print("\t"+annoDetail.getGo()+"\t"+got.getName()+"\t"+got.getNameSpace());
+									}
+								}else{
+									//print missing cats
+									System.out.println(annoDetail.getGo());
+								}
+							}	
+						}
+						multipleAnnot = false;
+						outFile.println();
+
+
+					}else{
+						//there is no annotation
+						outFile.println("\t"+null+"\t"+null+"\t"+null);
+					}
+					annoTmp=null;
+
+				}
+			}
+
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void loadShownAnnotPlusCommonNamePlusDescWithTargetGOs(String geneListFilePath, String ontologyFilePath,String annotFilePath,String idFile, String annotExtraFile, String targetGOs){
+		try {
+			HashMap<Integer, GoTerm> ontology = loadOntology(ontologyFilePath);
+			HashMap<String, ArrayList<AnnotationDetail>> notat = loadAnnotation(annotFilePath);
+			HashMap<String, GoID> ids = loadIdentifiers(idFile);
+			HashMap<String, ArrayList<String>> descripts = loadDescriptions(annotExtraFile);
+
+			String str;
+			ArrayList<AnnotationDetail> annoTmp = null;
+			GoTerm got = null;
+			boolean multipleAnnot = false;
+
+			String currPlazaName = null;
+			GoID goi;
+			ArrayList<String> descs;
+			ArrayList<Integer> targetGos = new ArrayList<>();
+			String targetsFound;
+			String arFi[];
+
+
+			try(BufferedReader inFile = new BufferedReader(new FileReader(geneListFilePath));
+					PrintWriter outFile = new PrintWriter(new FileOutputStream(geneListFilePath+"PlazaAnotOut.tsv"))){
+				
+				//get target go as arrayList
+				arFi = targetGOs.split(",");
+				for (String stGo : arFi) {
+					targetGos.add(Integer.parseInt(stGo));
+				}
+
+				//outFile.println("GeneName"+"\t"+"Go"+"\t"+"GoName"+"\t"+"NameSpace");
+				outFile.println("Names"+"\t"+"Descs"+"\t"+"WithTF"+"\t"+"Go"+"\t"+"GoName"+"\t"+"NameSpace");
+
+				while ((str = inFile.readLine()) != null) {
+					//Print name as reference
+					outFile.print("Name:"+str);
+					//first get others ids
+					goi = ids.get(str);
+					if(goi!=null){
+						if(goi.getPlazaName()!=null)
+							outFile.print(" "+"PlazaName:"+goi.getPlazaName());currPlazaName = goi.getPlazaName();
+							if(goi.getCommonName()!=null)
+								outFile.print(" "+"CommonName:"+goi.getCommonName());
+							if(goi.getUniprot()!=null)
+								outFile.print(" "+"Uniprot:"+goi.getUniprot());
+					}
+					goi=null;
+
+					outFile.print("\t");
+
+					//get descriptions
+					descs = descripts.get(currPlazaName);
+					if(descs!=null){
+						for (String sing : descs) {
+							outFile.print(sing+"~");
+						}
+					}
+					currPlazaName=null;
+					descs=null;
+
+					outFile.print("\t");
+					annoTmp = notat.get(str);
+					
+					if(annoTmp!=null){
+
+						targetsFound = GoDescLoader.contentGO(targetGos, annoTmp);
+						outFile.print(targetsFound);
+
+					}else{
+						outFile.print("None");
+					}
 
 					//check if there is any annotation
 					if(annoTmp!=null){
