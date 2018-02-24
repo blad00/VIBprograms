@@ -64,13 +64,14 @@ public class BioSampleSearcher {
 		String harmonized_name="";
 		String display_name="";
 		
-		String cultivar=null,genotype=null,ecotype=null,tissue=null,dev_stage=null;
+		String cultivar=null,genotype=null,ecotype=null,tissue=null,dev_stage=null,leaf_number=null,stage=null,source_name=null,maize_cultivar=null;
 		
 		int numAtt=0;
 
 		
 
-		outFile.println("BioSample	Title	cultivar	genotype	ecotype	tissue	dev_stage	#Attr	ConcatAttrNames");
+		outFile.println("BioSample"+"\t"+"Title"+"\t"+"Paragraph"+"\t"+"cultivar"+"\t"+"genotype"+"\t"+"ecotype"+"\t"+"tissue"+"\t"+"dev_stage"+"\t"+"leaf number"+"\t"+
+		"Stage"+"\t"+"source name"+"\t"+"maize cultivar"+"\t"+"#Attr"+"\t"+"ConcatAttrNames");
 
 		for(int i=0;i<offspring.getLength();i++){  
 			Node node = offspring.item(i);
@@ -86,8 +87,23 @@ public class BioSampleSearcher {
 					description = (Element)elem.getElementsByTagName("Description").item(0);
 					outFile.print(description.getElementsByTagName("Title").item(0).getTextContent());
 					outFile.print("\t");
+					
+					//Get description (Paragraph)
+					Element comment = (Element)description.getElementsByTagName("Comment").item(0);
+					
+					if(comment!=null){
+						NodeList paragraph = comment.getElementsByTagName("Paragraph");
+						outFile.print(paragraph.item(0).getTextContent());
+						outFile.print("\t");
+					}else{
+						outFile.print("null");
+						outFile.print("\t");
+					}
+					
+					
+					
 
-					//Get attrributes
+					//Get attributes
 					eleNodAtt = (Element)elem.getElementsByTagName("Attributes").item(0);
 					attriList = eleNodAtt.getChildNodes();
 //					System.out.println(attriList.getLength());
@@ -121,23 +137,36 @@ public class BioSampleSearcher {
 								if(Arrays.asList(names).contains("dev_stage")){
 									dev_stage = eleNo.getTextContent();
 								}
-							
+								if(Arrays.asList(names).contains("leaf number")){
+									leaf_number = eleNo.getTextContent();
+								}
+								if(Arrays.asList(names).contains("Stage")){
+									stage = eleNo.getTextContent();
+								}
+								if(Arrays.asList(names).contains("source name")){
+									source_name = eleNo.getTextContent();
+								}
+								if(Arrays.asList(names).contains("maize cultivar")){
+									maize_cultivar = eleNo.getTextContent();
+								}
+
+								
 							}
 						
 						}
 						
 					}
 					// print interesting fields
-					outFile.print(cultivar+"\t"+genotype+"\t"+ecotype+"\t"+tissue+"\t"+dev_stage+"\t");
+					outFile.print(cultivar+"\t"+genotype+"\t"+ecotype+"\t"+tissue+"\t"+dev_stage+"\t"+leaf_number+"\t"+stage+"\t"+source_name+"\t"+maize_cultivar+"\t");
 					//print numer of attr
 					outFile.print(numAtt+"\t");
 					//print all atribs
-					outFile.print(allAttris+"\t");
+					outFile.print(allAttris);
 
 				}
 				//reset vars
 				allAttris="";
-				cultivar=null;genotype=null;ecotype=null;tissue=null;dev_stage=null;
+				cultivar=null;genotype=null;ecotype=null;tissue=null;dev_stage=null;leaf_number=null;stage=null;source_name=null;maize_cultivar=null;
 				numAtt=0;
 				
 			}
