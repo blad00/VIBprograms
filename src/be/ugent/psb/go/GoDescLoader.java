@@ -32,8 +32,8 @@ public class GoDescLoader {
 		try {
 
 
-//			loadShownAnnotPlusCommonNamePlusDesc(args[0], args[1], args[2],args[3],args[4]);
-			loadShownAnnotPlusCommonNamePlusDescWithTargetGOs(args[0], args[1], args[2],args[3],args[4],args[5]);
+			loadShownAnnotPlusCommonNamePlusDesc(args[0], args[1], args[2],args[3],args[4]);
+//			loadShownAnnotPlusCommonNamePlusDescWithTargetGOs(args[0], args[1], args[2],args[3],args[4],args[5]);
 
 
 			
@@ -131,7 +131,7 @@ public class GoDescLoader {
 
 					}else{
 						//there is no annotation
-						outFile.println("\t"+null+"\t"+null+"\t"+null);
+						outFile.println("\t"+"UnAnnot"+"\t"+null+"\t"+null);
 					}
 					annoTmp=null;
 
