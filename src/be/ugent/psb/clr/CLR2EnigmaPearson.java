@@ -37,7 +37,7 @@ public class CLR2EnigmaPearson {
 		double corr;
 		
 		try(BufferedReader amat = new BufferedReader(new FileReader(amatFile));
-				PrintWriter outFile = new PrintWriter(new FileOutputStream(outputFile));
+//				PrintWriter outFile = new PrintWriter(new FileOutputStream(outputFile));
 				PrintWriter outFileEnigma = new PrintWriter(new FileOutputStream(outputFile+".ENI"))){
 			
 			//load all expression
@@ -56,7 +56,7 @@ public class CLR2EnigmaPearson {
 						if(!pairs.contains(arrayl[0]+header[i])){
 							pairs.add(arrayl[0]+header[i]);
 							pairs.add(header[i]+arrayl[0]);
-							outFile.println(arrayl[0]+"\t"+header[i]+"\t"+val);
+//							outFile.println(arrayl[0]+"\t"+header[i]+"\t"+val);
 							
 							//get exp from current genes
 							exp1 = mapExp.get(arrayl[0]);
