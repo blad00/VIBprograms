@@ -43,9 +43,9 @@ public class FastqcTotalSeq {
 			for (int i=0;i<listFiles.size();i++) {
 				filename = listFiles.get(i).getAbsolutePath();
 //				Forward
-//				printTotalSeqs(filename,outFile);
+				printTotalSeqs(filename,outFile);
 //				Forward cleaned			
-				printTotalSeqsCleaned(filename,outFile);
+//				printTotalSeqsCleaned(filename,outFile);
 				outFile.println();
 			}
 		}catch (Exception e) {
