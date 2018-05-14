@@ -16,12 +16,12 @@ import java.util.Map;
 
 public class GeneFinderManyFolder {
 	/*
-	 * This program find genes or any keyword from a list in every text file in a destination folder
+	 * This program find genes or any keyword from a list in every text file in a list of destination folders
 	 * The output will be the same inputfile plus .found
 	 * now the output can be random with the iteration of the hashmap or the same order of the input file (default)
 	 * 
-	 * Arg 0 target folder
-	 * Arg 1 list file
+	 * Arg 0 list target folder
+	 * Arg 1 list file to search
 	 * 
 	 * 
 	 */
@@ -29,7 +29,8 @@ public class GeneFinderManyFolder {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		String inFolder = args[0];
+		
+		String inFolder;
 
 		String filename;
 		String shortfilename;
@@ -38,14 +39,15 @@ public class GeneFinderManyFolder {
 		File[] files = null;
 
 		BufferedReader inFileExpTable = null;
-		BufferedReader inputFile4Pinting = null;
+		BufferedReader inputFile4Printing = null;
 		String str;
+		String strFolder;
 		ArrayList<String> listSearch =  new ArrayList<>();
 		HashMap<String, ArrayList<String>> mapMatches = new HashMap<>();
-		String ele;
-		ArrayList<String> listEle = null;
 
-		try(BufferedReader listFile = new BufferedReader(new FileReader(args[1]));
+
+		try(BufferedReader listFolders = new BufferedReader(new FileReader(args[0]));
+				BufferedReader listFile = new BufferedReader(new FileReader(args[1]));
 				PrintWriter outFile = new PrintWriter(new FileOutputStream(args[1]+".found"))){
 
 
@@ -55,52 +57,60 @@ public class GeneFinderManyFolder {
 				mapMatches.put(str, new ArrayList<>());
 			}
 
+			while ((strFolder = listFolders.readLine()) != null) {
 
-			//get list of files
-			if (inFolder != null && !inFolder.equals("")) {
-				file = new File(inFolder);
-				if (file.exists()) {
-					files = file.listFiles();
+				inFolder = strFolder;
+
+				outFile.println(inFolder);
+
+				//get list of files
+				if (inFolder != null && !inFolder.equals("")) {
+					file = new File(inFolder);
+					if (file.exists()) {
+						files = file.listFiles();
+					}
 				}
-			}
 
-			List<File> listFiles = new ArrayList<File>(Arrays.asList(files));
+				List<File> listFiles = new ArrayList<File>(Arrays.asList(files));
 
-			// iter list of files
-			for (int i=0;i<listFiles.size();i++) {
+				// iter list of files
+				for (int i=0;i<listFiles.size();i++) {
 
-				file = listFiles.get(i);
+					file = listFiles.get(i);
 
-				//skip
-				if(file.isDirectory()||isBinaryFile(file))
-					continue;
+					//skip
+					if(file.isDirectory()||isBinaryFile(file))
+						continue;
 
-				filename = listFiles.get(i).getAbsolutePath();
+					filename = listFiles.get(i).getAbsolutePath();
 
-				inFileExpTable = new BufferedReader(new FileReader(filename));
+					inFileExpTable = new BufferedReader(new FileReader(filename));
 
 
-				//read the file line per line
-				while ((str = inFileExpTable.readLine()) != null) {
-					//check if it has some of the key words					
-					for (String sElement : listSearch) {
-						if(str.contains(sElement)){
-							shortfilename = listFiles.get(i).getName();
-							mapMatches.get(sElement).add(shortfilename+"\t"+str);
+					//read the file line per line
+					while ((str = inFileExpTable.readLine()) != null) {
+						//check if it has some of the key words					
+						for (String sElement : listSearch) {
+							if(str.contains(sElement)){
+								shortfilename = listFiles.get(i).getName();
+								mapMatches.get(sElement).add(shortfilename+"\t"+str);
+							}
 						}
 					}
 
+					inFileExpTable.close();
+
 				}
 
-				inFileExpTable.close();
+				//Printing
+				//printRandomOrder(mapMatches, outFile);
+				inputFile4Printing = new BufferedReader(new FileReader(args[1]));
+				printInputOrder(inputFile4Printing, mapMatches, outFile);
+				inputFile4Printing.close();
+				//clean the map for next location
+				cleanMap(mapMatches);
+			}	
 
-			}
-
-			//Printing
-			//printRandomOrder(mapMatches, outFile);
-			inputFile4Pinting = new BufferedReader(new FileReader(args[1]));
-			printInputOrder(inputFile4Pinting, mapMatches, outFile);
-			inputFile4Pinting.close();
 
 		}catch (Exception e) {
 			// TODO: handle exception
@@ -108,6 +118,16 @@ public class GeneFinderManyFolder {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public static void cleanMap(HashMap<String, ArrayList<String>> map){
+		
+
+		for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
+			
+			map.put(entry.getKey(), new ArrayList<>());
+		}	
+		
 	}
 
 	public static void printRandomOrder(HashMap<String, ArrayList<String>> mapMatches, PrintWriter outFile){
@@ -129,14 +149,14 @@ public class GeneFinderManyFolder {
 	}
 
 	public static void printInputOrder(BufferedReader listFile, HashMap<String, ArrayList<String>> mapMatches, PrintWriter outFile) throws IOException{
-		
+
 		ArrayList<String> listEle = null;
 		String str;
 
 		while ((str = listFile.readLine()) != null) {
 			listEle = mapMatches.get(str);
 			outFile.println(str);
-			
+
 			for (String sElement : listEle) {
 				outFile.println(sElement);
 			}

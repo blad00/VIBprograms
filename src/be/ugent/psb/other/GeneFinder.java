@@ -44,8 +44,7 @@ public class GeneFinder {
 		String str;
 		ArrayList<String> listSearch =  new ArrayList<>();
 		HashMap<String, ArrayList<String>> mapMatches = new HashMap<>();
-		String ele;
-		ArrayList<String> listEle = null;
+
 
 		try(BufferedReader listFile = new BufferedReader(new FileReader(args[1]));
 				PrintWriter outFile = new PrintWriter(new FileOutputStream(args[1]+".found"))){
