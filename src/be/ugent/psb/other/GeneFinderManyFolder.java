@@ -61,7 +61,7 @@ public class GeneFinderManyFolder {
 
 				inFolder = strFolder;
 
-				outFile.println(inFolder);
+				outFile.println(">>"+inFolder);
 
 				//get list of files
 				if (inFolder != null && !inFolder.equals("")) {
