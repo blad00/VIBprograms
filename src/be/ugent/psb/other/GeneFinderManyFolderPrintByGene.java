@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GeneFinderManyFolder {
+public class GeneFinderManyFolderPrintByGene {
 	/*
 	 * This program find genes or any keyword from a list in every text file in a list of destination folders
 	 * The output will be the same inputfile plus .found
@@ -29,7 +29,7 @@ public class GeneFinderManyFolder {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		
+
 		String inFolder;
 
 		String filename;
@@ -43,25 +43,26 @@ public class GeneFinderManyFolder {
 		String str;
 		String strFolder;
 		ArrayList<String> listSearch =  new ArrayList<>();
+		ArrayList<String> listFolders = new ArrayList<>();
 		HashMap<String, ArrayList<String>> mapMatches = new HashMap<>();
+		ArrayList<HashMap<String, ArrayList<String>>> listMaps = new ArrayList<>();
 
-
-		try(BufferedReader listFolders = new BufferedReader(new FileReader(args[0]));
-				BufferedReader listFile = new BufferedReader(new FileReader(args[1]));
+		try(BufferedReader listFoldersFile = new BufferedReader(new FileReader(args[0]));
 				PrintWriter outFile = new PrintWriter(new FileOutputStream(args[1]+".found"))){
 
 
 			//load list
+			BufferedReader listFile = new BufferedReader(new FileReader(args[1]));
 			while ((str = listFile.readLine()) != null) {
 				listSearch.add(str);
 				mapMatches.put(str, new ArrayList<>());
 			}
+			listFile.close();
 
-			while ((strFolder = listFolders.readLine()) != null) {
+			while ((strFolder = listFoldersFile.readLine()) != null) {
 
 				inFolder = strFolder;
-
-				outFile.println(">>"+inFolder);
+				listFolders.add(inFolder);
 
 				//get list of files
 				if (inFolder != null && !inFolder.equals("")) {
@@ -102,15 +103,28 @@ public class GeneFinderManyFolder {
 
 				}
 
-				//Printing
-				//printRandomOrder(mapMatches, outFile);
-				//reader for input order
-				inputFile4Printing = new BufferedReader(new FileReader(args[1]));
-				printInputOrder(inputFile4Printing, mapMatches, outFile);
-				inputFile4Printing.close();
-				//clean the map for next location
-				cleanMap(mapMatches);
-			}	
+
+				listMaps.add(mapMatches);
+
+
+				//reset the map for next location
+				//load list
+
+				mapMatches = new HashMap<>();
+
+				for (String keyGene : listSearch) {
+					mapMatches.put(keyGene, new ArrayList<>());
+				}
+
+
+
+			}
+			//Printing
+			printByGene(listSearch, listMaps, listFolders, outFile);
+
+
+
+
 
 
 		}catch (Exception e) {
@@ -120,15 +134,43 @@ public class GeneFinderManyFolder {
 		}
 
 	}
-	
+
+	public static void printByGene(ArrayList<String> keyGenes, ArrayList<HashMap<String, ArrayList<String>>> maps, ArrayList<String> targets,PrintWriter outFile) throws IOException{
+		ArrayList<String> listEle = null;
+
+		int itar=0;
+
+
+		//iterate each gene
+		//while ((str = listFile.readLine()) != null) {
+		for (String str : keyGenes) {
+
+
+			//print gene with mark to search easily
+			outFile.println(">>"+str);
+			//search in every target and get the current 
+			for (HashMap<String, ArrayList<String>> mapTMP : maps) {
+				listEle = mapTMP.get(str);
+				//print current target result with current gene
+				outFile.println(targets.get(itar));
+				itar++;
+				for (String sElement : listEle) {
+					outFile.println(sElement);
+				}
+
+			}
+
+		}
+	}
+
 	public static void cleanMap(HashMap<String, ArrayList<String>> map){
-		
+
 
 		for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
-			
+
 			map.put(entry.getKey(), new ArrayList<>());
 		}	
-		
+
 	}
 
 	public static void printRandomOrder(HashMap<String, ArrayList<String>> mapMatches, PrintWriter outFile){
