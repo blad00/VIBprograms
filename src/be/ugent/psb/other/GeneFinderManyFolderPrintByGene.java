@@ -159,7 +159,7 @@ public class GeneFinderManyFolderPrintByGene {
 				}
 
 			}
-
+			itar = 0;
 		}
 	}
 
