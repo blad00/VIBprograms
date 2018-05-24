@@ -73,9 +73,10 @@ public class GOPredictPerformanceExtractor {
 
 						try(BufferedReader inFile = new BufferedReader(new FileReader(filename))){
 							while ((str = inFile.readLine()) != null) {
-								//						if(str.contains("C4 photosynthesis")){
-								if(str.contains(godesc)){
-									splitLine = str.split("\t");
+//								if(str.contains("C4 photosynthesis")){}
+								splitLine = str.split("\t");
+								if(splitLine[2].equals(godesc)){
+									
 
 									//add values into arrays to operate them
 									for(int o=0;o<10;o++){
