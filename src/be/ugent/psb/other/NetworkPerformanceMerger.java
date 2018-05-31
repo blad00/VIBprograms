@@ -50,8 +50,11 @@ public class NetworkPerformanceMerger {
 					}	
 				}
 				
-				if(!hayRecall)
+				if(!hayRecall){
+//					System.out.println(strRec);
 					continue;
+				}
+					
 								
 				outFile.print(args[1]+"\t"+"Recall"+"\t");
 				outFile.println(strRec);
