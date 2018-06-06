@@ -19,6 +19,7 @@ public class CLR2EnigmaPearson {
 	 * Arg 0 matrix file
 	 * Arg 1 threshold
 	 * Arg 2 output file
+	 * Arg 3 original expression file to perform pearson correlation
 	 * @throws IOException 
 	 * @throws FileNotFoundException 
 	 */
