@@ -109,7 +109,7 @@ public class RILannot {
 				outFile.println(pheno);
 
 				for (String gene : tmpGenes) {
-					outFile.println(gene);
+					outFile.println(gene+"\t"+pheno);
 				}
 
 
