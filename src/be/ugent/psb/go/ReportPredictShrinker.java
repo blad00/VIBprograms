@@ -60,6 +60,7 @@ public class ReportPredictShrinker {
 				
 				outFilePaper = new PrintWriter(new FileOutputStream(filename+"Out.tsv"));
 				outFileShort = new PrintWriter(new FileOutputStream(filename+"Out.tsv"));
+				//make a change
 			}
 		
 		}catch (Exception e) {
