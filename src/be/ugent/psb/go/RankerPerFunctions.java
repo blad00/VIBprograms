@@ -1,5 +1,5 @@
 
-package be.ugent.psb.annotFile;
+package be.ugent.psb.go;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
