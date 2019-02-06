@@ -1,8 +1,15 @@
 package be.ugent.psb.network;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -20,12 +27,53 @@ public class NeighborhoodFinderList {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
-
-		//load Network
-		Graph<String, DefaultEdge> network = loadNetwork(args[0]);
 		
-		System.out.println(Graphs.neighborListOf(network, args[1]));
+		String str = null;
+		List <String> neighbours; 
+		String arile[];
+		try(BufferedReader inListFile = new BufferedReader(new FileReader(args[2]));
+				PrintWriter outFile = new PrintWriter(new FileOutputStream(args[1]))){
+			
+			//load Network
+			Graph<String, DefaultEdge> network = loadNetwork(args[0]);
+			//skip header
+			inListFile.readLine();
+			
+			Set <String> vertexList = network.vertexSet();
+			String genetf;
+			
+			while ((str = inListFile.readLine()) != null) {
+				//because it is in enigma format 2 columns
+				arile = str.split("\t");
+				genetf = arile[0];
+				
+				if(vertexList.contains(genetf)){
+					neighbours = Graphs.neighborListOf(network, genetf);
+				}else{
+					continue;
+				}
+				
+//				System.out.println(neighbours);
+				//Iterate name of all neighbors for that gene
+				
+				for (String neiName : neighbours) {
+					outFile.println(neiName);
+				}
+				
+				
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+//		System.out.println(Graphs.neighborListOf(network, args[1]));
 
 	}
 
