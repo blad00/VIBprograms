@@ -84,11 +84,16 @@ public class NeighborhoodFinderListIn2sets {
 					
 					for (String stri : set1) {
 						if(neighbours.contains(stri))
-							outFile1.println(genetf);
+							//printing TF
+							//outFile1.println(genetf);
+							//printing gene targeted
+							outFile1.println(stri);
 					}
 					for (String stri : set2) {
 						if(neighbours.contains(stri))
-							outFile2.println(genetf);
+							//printing TF
+							//outFile2.println(genetf);
+							outFile2.println(stri);
 					}
 					
 				}
