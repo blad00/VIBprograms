@@ -80,8 +80,10 @@ public class FastqcTotalSeq2 {
             	if(stmp.equalsIgnoreCase("Filename")){
             		sampleGZ = columns.get(++coli).text();
             		arle = sampleGZ.split("_");
-
-            		sampleName = "P"+arle[posSam].split("-")[1]; 
+            		//first set
+            		sampleName = arle[posSam];
+            		//second set
+//            		sampleName = "P"+arle[posSam].split("-")[1]; 
 
             		outFile.print(sampleName+"\t");
             	}

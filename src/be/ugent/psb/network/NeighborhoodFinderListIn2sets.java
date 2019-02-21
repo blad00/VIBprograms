@@ -87,13 +87,13 @@ public class NeighborhoodFinderListIn2sets {
 							//printing TF
 							//outFile1.println(genetf);
 							//printing gene targeted
-							outFile1.println(stri);
+							outFile1.println(stri+"\t"+genetf);
 					}
 					for (String stri : set2) {
 						if(neighbours.contains(stri))
 							//printing TF
 							//outFile2.println(genetf);
-							outFile2.println(stri);
+							outFile2.println(stri+"\t"+genetf);
 					}
 					
 				}
