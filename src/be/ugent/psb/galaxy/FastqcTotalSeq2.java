@@ -81,9 +81,9 @@ public class FastqcTotalSeq2 {
             		sampleGZ = columns.get(++coli).text();
             		arle = sampleGZ.split("_");
             		//first set
-            		sampleName = arle[posSam];
+//            		sampleName = arle[posSam];
             		//second set
-//            		sampleName = "P"+arle[posSam].split("-")[1]; 
+            		sampleName = "P"+arle[posSam].split("-")[1]; 
 
             		outFile.print(sampleName+"\t");
             	}
