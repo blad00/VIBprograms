@@ -11,9 +11,9 @@ public class NewPredictionsExtractor {
 	/* arg 0 dir with files predictions
 	 * arg 1 ontology file
 	 * arg 2 annotation file
-	 * arg 3 convertion table
+	 * arg 3 conversion table
 	 * arg 4 additional info
-	 * arg 5 Interest GOs coma separated
+	 * arg 5 Interest GOs comma separated
 */
 	
 	/*
@@ -23,16 +23,24 @@ D:\DanielVIB\maizeEnrich\superAnnotV3\AnnotV3UniqueGeneGOShown.tsv
 D:\DanielVIB\maizeEnrich\superAnnotV3\id_conversion.zmaWithGeneModelV3.tsv
 D:\DanielVIB\maizeEnrich\superAnnotV3\annotation_extra.zma.csv
 3700,4871,6355
+
+/home/dacru/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/SAC_corr_0.724_FDR_0.01_bingo0.01/runFilter/GO
+/home/dacru/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/superAnnotV3/go-basic.obo
+/home/dacru/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/superAnnotV3/AnnotV3UniqueGeneGOShown.tsv
+/home/dacru/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/superAnnotV3/id_conversion.zmaWithGeneModelV3.tsv
+/home/dacru/Midas/biocomp/groups/group_esb/dacru/maizeEnrich/superAnnotV3/annotation_extra.zma.csv
+3700,4871,6355
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 //		String dir1 = "D:/DanielVIB/Maize/PredictGenes/PingORunComparison/CLR_allPlants_FDR_0.001_bingo0.01_Run/runFilter/GO";
 		
-		String goCats = "D:/DanielVIB/Maize/PredictGenes/PingORunComparison/GO-ID.txt";		
-//		String goCats = "/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/GO-ID.txt";
+//		String goCats = "D:/DanielVIB/Maize/PredictGenes/PingORunComparison/GO-ID.txt";		
+		String goCats = "/home/dacru/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/SAC_corr_0.724_FDR_0.01_bingo0.01/GO-ID207.txt";
 		String dir1 = args[0];
 		String arfi[];
+		
 		ArrayList<Integer> targetGos = new ArrayList<>();
 		
 		String str;
@@ -59,11 +67,11 @@ D:\DanielVIB\maizeEnrich\superAnnotV3\annotation_extra.zma.csv
 			
 			while ((str = fileGoCats.readLine()) != null) {
 				
-				BufferedReader file1 = new BufferedReader(new FileReader(dir1+str+"/CLR_0.001EnigmaFormatOnlyPos.txt.pgo"));
-				PrintWriter outFile = new PrintWriter(new FileOutputStream("D:/DanielVIB/Maize/PredictGenes/PingORunComparison/rawCLRpredOut/GO"+str));
-//				PrintWriter outFile = new PrintWriter(new FileOutputStream("/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/merged/GO"+str+".tsv"));
+				BufferedReader file1 = new BufferedReader(new FileReader(dir1+str+"/SAC_Pearson_MaizeNetwork.tsv.pgo"));
+//				PrintWriter outFile = new PrintWriter(new FileOutputStream("D:/DanielVIB/Maize/PredictGenes/PingORunComparison/rawCLRpredOut/GO"+str));
+				PrintWriter outFile = new PrintWriter(new FileOutputStream("/home/dacru/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/SAC_corr_0.724_FDR_0.01_bingo0.01/merged/GO"+str+".tsv"));
 				//header
-				outFile.println("GeneName"+"\t"+"PredGO_ID"+"\t"+"PredGO_Name"+"\t"+"CLR_Pval"+"\t"+"WithTF"+"\t"+"OtherNames"+"\t"+"Descrip"+"\t"+"CurrentAnnot");
+				outFile.println("GeneName"+"\t"+"PredGO_ID"+"\t"+"PredGO_Name"+"\t"+"SAC_Pval"+"\t"+"WithTF"+"\t"+"OtherNames"+"\t"+"Descrip"+"\t"+"CurrentAnnot");
 				//skip until the header
 				while ((str = file1.readLine()) != null) {
 					arfi=str.split("\t");
