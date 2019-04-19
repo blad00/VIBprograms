@@ -78,10 +78,10 @@ public class NetworkStats {
 
 				filename = listFiles.get(i).getAbsolutePath();
 				
-				
+				System.out.println("processing "+file.getName());
 
 				netTMP = loadNetwork(filename, annotGenes);
-
+				
 				outFileNets.println(file.getName()+"\t"+netTMP.getNumNodes()+"\t"+netTMP.getNumEdges()+"\t"+netTMP.getClusterCoefficient()+
 						"\t"+netTMP.getDensity()+"\t"+netTMP.getUnannot());
 
@@ -110,7 +110,7 @@ public class NetworkStats {
 		LocalClusteringCoefficientResult<String> resultCluCoe;
 		ArrayList<String> nodeList = loadNodeList(filePath);
 		net.setNumNodes(nodeList.size());
-
+		System.out.println("Done setNumNodes");
 
 		try(BufferedReader inFile = new BufferedReader(new FileReader(filePath))){
 
@@ -138,15 +138,24 @@ public class NetworkStats {
 			}
 
 			net.setNumEdges(numEdges);
+			System.out.println("Done setNumEdges");
+			
 			net.setNetwork(g);
+			System.out.println("Done setNetwork");
+			
+			net.setDensity(calculateDensity(nodeList.size(), numEdges));
+			System.out.println("Done calculateDensity");
+			//for unannotated fraction
+			net.setUnannot(unannotFract(genesWithAnnot, nodeList));
+			System.out.println("Done unannotFract");
 
 			resultCluCoe = new LocalClusteringCoefficientMetric<>(g).calculate();
-			net.setClusterCoefficient(resultCluCoe.getAverageClusteringCoefficient());
-			net.setDensity(calculateDensity(nodeList.size(), numEdges));
-			//for unannotated fraction
+			System.out.println("Done LocalClusteringCoefficientMetric");
 			
-			net.setUnannot(unannotFract(genesWithAnnot, nodeList));
+			net.setClusterCoefficient(resultCluCoe.getAverageClusteringCoefficient());
+			System.out.println("Done getAverageClusteringCoefficient");
 
+			
 
 
 

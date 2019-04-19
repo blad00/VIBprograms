@@ -74,7 +74,8 @@ public class NetworkPearsonCreatorFromFile {
 
 						//check corr ths and only positives
 						if(corr>=pcoe){
-							outFileEnigma.println(gene1+"\t"+gene2+"\t"+"+"+"\t"+"0");
+							//outFileEnigma.println(gene1+"\t"+gene2+"\t"+"+"+"\t"+"0");
+							outFileEnigma.println(gene1+"\t"+gene2+"\t"+"+"+"\t"+corr);
 							//System.out.println(gene1+"\t"+gene2+"\t"+corr);
 						}
 
