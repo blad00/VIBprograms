@@ -57,13 +57,18 @@ public class PredictPerformanceExtractor {
 			}
 
 			List<File> listFiles = new ArrayList<File>(Arrays.asList(files));
-
+//			String arTmp[] = null;
 			for (int i=0;i<listFiles.size();i++) {
 				recall = new double[10];
 				precision = new double[10];
 				fmeasure = new double[10];
 				filename = listFiles.get(i).getAbsolutePath();
-				onlyname = listFiles.get(i).getName().split("_")[0];
+				//onlyname = listFiles.get(i).getName().split("_")[0];
+				//for Pearson Nets
+//				System.out.println(listFiles.get(i).getName());
+//				arTmp = listFiles.get(i).getName().split("\\.");
+				
+				onlyname = listFiles.get(i).getName().split("\\.")[0];
 
 				try(BufferedReader inFile = new BufferedReader(new FileReader(filename))){
 

@@ -69,7 +69,7 @@ public class GOPredictPerformanceExtractor {
 						precision = new double[10];
 						fmeasure = new double[10];
 						filename = listFiles.get(i).getAbsolutePath();
-						onlyname = listFiles.get(i).getName().split("_")[0];
+						onlyname = listFiles.get(i).getName().split("\\.")[0];
 
 						try(BufferedReader inFile = new BufferedReader(new FileReader(filename))){
 							while ((str = inFile.readLine()) != null) {
