@@ -59,8 +59,15 @@ public class SAMsacToENIGMAconverter {
 				//-1 because SAC network is based 1
 				gene1 = geneIndex.get(index1-1);
 				gene2 = geneIndex.get(index2-1);
-
-				outFileENI.println(gene1+"\t"+gene2+"\t"+"+"+"\t"+"0");
+//				if corr is not needed
+//				outFileENI.println(gene1+"\t"+gene2+"\t"+"+"+"\t"+"0");
+//				if needed
+				if(!ar[5].equals("")) {//SAC worked
+					outFileENI.println(gene1+"\t"+gene2+"\t"+"+"+"\t"+ar[5]);
+				}else {//regular pearson is taken
+					outFileENI.println(gene1+"\t"+gene2+"\t"+"+"+"\t"+ar[11]);
+				}
+				
 			}
 					
 			
