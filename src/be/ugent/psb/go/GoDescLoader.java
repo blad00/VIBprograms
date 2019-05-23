@@ -541,6 +541,43 @@ public class GoDescLoader {
 		return goTerms;
 	}
 	
+	public static HashMap<String, GoTerm> loadOntologyNameKey(String ontologyFile) throws Exception, IOException{
+		String str = null;
+
+		String[] arrayLineFile;
+		HashMap<String, GoTerm> goTerms = new HashMap<>();
+		int id;
+		String name;
+		String namespace;
+		try(BufferedReader inFile = new BufferedReader(new FileReader(ontologyFile))){
+			while ((str = inFile.readLine()) != null) {
+
+				if(str.equalsIgnoreCase("[Term]")){
+					GoTerm gotem = new GoTerm();
+					//ID
+					str = inFile.readLine();
+					arrayLineFile = str.split(":");
+					id = Integer.parseInt(arrayLineFile[2]);
+					gotem.setId(id);
+					//name
+					str = inFile.readLine();
+					arrayLineFile = str.split(":");
+					name = arrayLineFile[1].replaceFirst("\\s+","");
+					gotem.setName(name);
+					//namespace
+					str = inFile.readLine();
+					arrayLineFile = str.split(":");
+					namespace = arrayLineFile[1].replaceFirst("\\s+","");
+					gotem.setNameSpace(namespace);
+
+					goTerms.put(name, gotem);
+				}
+			}
+		}
+
+		return goTerms;
+	}
+	
 	public static String contentGO(ArrayList<Integer> targetGOs, ArrayList<AnnotationDetail> annots) throws Exception{
 		
 //		int total2CheckGo = targetGOs.size();
