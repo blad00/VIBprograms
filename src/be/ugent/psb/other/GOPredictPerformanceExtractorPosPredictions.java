@@ -15,12 +15,10 @@ import java.util.List;
 public class GOPredictPerformanceExtractorPosPredictions {
 
 	/**
-	 * This program will take the performance output from PINGO agronomics.PrecisionRecall and creates 3 files per network, precition. recal and Fmeasure
+	 * This program will take the counts of positives predictions and will create a separated file for each category
 	 * @param args
-	 * arg 0 folder with the *_pingo.txt files
+	 * arg 0 folder with the *POS files
 	 * arg 1 GO category
-	 * arg 2 output prefix
-
 	 */
 
 	public static void main(String[] args) {
@@ -39,23 +37,20 @@ public class GOPredictPerformanceExtractorPosPredictions {
 
 		String splitLine [];
 		String str;
-		double recall [] = null;
-		double precision [] = null;
-		double fmeasure [] = null;
+		String posVals [] = null;
+
 
 		try(BufferedReader inDescFile = new BufferedReader(new FileReader(godescFile))){
 			while ((godesc = inDescFile.readLine()) != null) {
 				
-				try(PrintWriter outFileREC = new PrintWriter(new FileOutputStream(inFolder+file.separatorChar+godesc+"REC.tsv"));
-						PrintWriter outFilePREC = new PrintWriter(new FileOutputStream(inFolder+file.separatorChar+godesc+"PREC.tsv"));
-						PrintWriter outFileFMES = new PrintWriter(new FileOutputStream(inFolder+file.separatorChar+godesc+"FMES.tsv"))){
+				try(PrintWriter outFilePOS = new PrintWriter(new FileOutputStream(inFolder+file.separatorChar+godesc+"POSOUT.tsv"))){
 					if (inFolder != null && !inFolder.equals("")) {
 						file = new File(inFolder);
 						//look for specific extension
 						if (file.exists()) {
 							files = file.listFiles(new FilenameFilter() {
 								public boolean accept(File dir, String name) {
-									return name.toString().toLowerCase().endsWith("_pingo.txt");
+									return name.toString().toLowerCase().endsWith(".pos");
 								}
 							});
 
@@ -65,9 +60,7 @@ public class GOPredictPerformanceExtractorPosPredictions {
 					List<File> listFiles = new ArrayList<File>(Arrays.asList(files));
 
 					for (int i=0;i<listFiles.size();i++) {
-						recall = new double[10];
-						precision = new double[10];
-						fmeasure = new double[10];
+						posVals = new String[10];
 						filename = listFiles.get(i).getAbsolutePath();
 						onlyname = listFiles.get(i).getName().split("\\.")[0];
 
@@ -80,33 +73,15 @@ public class GOPredictPerformanceExtractorPosPredictions {
 
 									//add values into arrays to operate them
 									for(int o=0;o<10;o++){
-										recall[o]=Double.parseDouble(splitLine[o+6]);
-										precision[o]=Double.parseDouble(splitLine[o+16]);
-										fmeasure[o]=2*((precision[o]*recall[o])/(precision[o]+recall[o]));
-
+										posVals[o]=splitLine[o+6];
 									}
 
-									//print RECALL 
-									outFileREC.print(onlyname);
-									for (double num : recall) {
-										outFileREC.print("\t"+num);	
+									//print POSTIVES 
+									outFilePOS.print(onlyname);
+									for (String cpos : posVals) {
+										outFilePOS.print("\t"+cpos);	
 									}
-									outFileREC.println();
-
-									//print PRECISION 
-									outFilePREC.print(onlyname);
-									for (double num : precision) {
-										outFilePREC.print("\t"+num);	
-									}
-									outFilePREC.println();
-
-									//print FMEASURE 
-									outFileFMES.print(onlyname);
-									for (double num : fmeasure) {
-										outFileFMES.print("\t"+num);	
-									}
-									outFileFMES.println();
-
+									outFilePOS.println();
 
 								}	
 
