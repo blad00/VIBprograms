@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class ReportPredictCLR {
+public class ReportPredictPaper {
 /*
  *  * /home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/PingORunComparison/CLR_allPlants_FDR_0.001_bingo0.01_Run/CLRpredOutSemSim
    /home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PiNGO_Maize_Ext/go-basic.obo
@@ -60,11 +60,11 @@ public class ReportPredictCLR {
 			HashMap<Integer, GoTerm> ontology = GoDescLoader.loadOntology(args[1]);
 			
 			
-			outFilePaper = new PrintWriter(new FileOutputStream("GenePredForPubOnlyCLR.tsv"));
+			outFilePaper = new PrintWriter(new FileOutputStream(inFolder+"GenePredForPub.tsv"));
 			outFilePaper.println("TargetGO_ID"+"\t"+"TargetGO_Name"+"\t"+"Gene"+"\t"+"PredGO_ID"+"\t"+"PredGO_Name"+"\t"+"SemSim"+"\t"+"CLR_Pval"
 								+"\t"+"CurrentAnnot");
 			
-			outFileShort = new PrintWriter(new FileOutputStream("GenePredShortOnlyCLR.tsv"));
+			outFileShort = new PrintWriter(new FileOutputStream(inFolder+"GenePredShort.tsv"));
 			outFileShort.println("TargetGO_ID"+"\t"+"TargetGO_Name"+"\t"+"Gene"+"\t"+"PredGO_ID"+"\t"+"PredGO_Name");
 			
 			for (i=0;i<listFiles.size();i++) {
