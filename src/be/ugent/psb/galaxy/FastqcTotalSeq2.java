@@ -79,11 +79,12 @@ public class FastqcTotalSeq2 {
             	
             	if(stmp.equalsIgnoreCase("Filename")){
             		sampleGZ = columns.get(++coli).text();
+            		
             		arle = sampleGZ.split("_");
             		//first set
-//            		sampleName = arle[posSam];
+            		sampleName = arle[posSam]+arle[posSam+2];
             		//second set
-            		sampleName = "P"+arle[posSam].split("-")[1]; 
+            		//sampleName = "P"+arle[posSam].split("-")[1]; 
 
             		outFile.print(sampleName+"\t");
             	}
