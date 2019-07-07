@@ -32,11 +32,11 @@ this program take a input list with a division of GO categories, to create a fil
 		BufferedReader inFileExpTable = null;
 		PrintWriter outFilePaper = null;
 		
-		String str;
+		String str = null;
 		String arFi[];
 		
-		String cuGoCatFile;
-		String cuGoCatCod;
+		String cuGoCatFile = null;
+		String cuGoCatCod = null;
 		String cuGoCatName;
 		
 		int i;
@@ -124,7 +124,7 @@ this program take a input list with a division of GO categories, to create a fil
 				inFileExpTable.close();
 					
 			}
-			
+			inFileDivGoCats.close();
 			outFilePaper.close();
 			
 			
@@ -133,7 +133,7 @@ this program take a input list with a division of GO categories, to create a fil
 			// TODO: handle exception
 			
 			e.printStackTrace();
-			System.out.println(onlyName);
+			System.out.println(str);
 		}	
 	}
 
