@@ -44,9 +44,9 @@ public class FastqcTotalSeq2 {
 			for (int i=0;i<listFiles.size();i++) {
 				filename = listFiles.get(i).getAbsolutePath();
 //				Forward
-				printTotalSeqs(filename,outFile,postSample);
+//				printTotalSeqs(filename,outFile,postSample);
 //				Forward cleaned			
-//				printTotalSeqsCleaned(filename,outFile);
+				printTotalSeqsCleaned(filename,outFile);
 				outFile.println();
 			}
 		}catch (Exception e) {
@@ -82,7 +82,8 @@ public class FastqcTotalSeq2 {
             		
             		arle = sampleGZ.split("_");
             		//first set
-            		sampleName = arle[posSam]+arle[posSam+2];
+            		//sampleName = arle[posSam]+arle[posSam+2];
+            		sampleName = arle[posSam];
             		//second set
             		//sampleName = "P"+arle[posSam].split("-")[1]; 
 
@@ -128,11 +129,11 @@ public class FastqcTotalSeq2 {
             	if(stmp.equalsIgnoreCase("Filename")){
             		sampleGZ = columns.get(++coli).text();
             		arle = sampleGZ.split("_");
-            		if(arle[3].equals("1")){
+//            		if(arle[3].equals("1")){
             			sampleName = arle[2]; 
-            		}else{
-            			sampleName = arle[3];
-            		}
+//            		}else{
+//            			sampleName = arle[3];
+//            		}
             		outFile.print(sampleName+"\t");
             	}
             	
