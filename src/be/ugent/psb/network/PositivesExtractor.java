@@ -13,7 +13,7 @@ import java.util.List;
 public class PositivesExtractor {
 	/*
 	 * this program goes trough all *.POS files and will generate a single file with one value of total positives per network
-	 * /home/dacru/Midas/research/projects/project_syngenta_c4/single_maize_plants/MoreDataSets/PearsonNetworks/ConsolidateCut/ResultsCutat1Pred/forPosPreds/samples_9.tsv.ENI_globalF.POS
+	 * /home/dacru/Midas/research/projects/project_syngenta_c4/single_maize_plants/MoreDataSets/PearsonNetworks/ConsolidateCut/ResultsCutat1Pred/forPosPreds/
 	 */
 
 	public static void main(String[] args) throws Exception{
@@ -42,7 +42,7 @@ public class PositivesExtractor {
 		//Go through all files extracting  (Genes) located in the first column
 		List<File> listFiles = new ArrayList<File>(Arrays.asList(files));
 		
-		PrintWriter outFileAll = new PrintWriter(new FileOutputStream(fileOut+".allPos"));
+		PrintWriter outFileAll = new PrintWriter(new FileOutputStream(fileOut));
 		//title
 		outFileAll.println("Network\tNumPos");
 		
@@ -62,14 +62,15 @@ public class PositivesExtractor {
 			while ((str = inFileExpTable.readLine()) != null) {
 //				System.out.println(str);
 				argsFile=str.split("\t");
-				numPos += Double.parseDouble(argsFile[6]);
+				if(!argsFile[6].equalsIgnoreCase("NaN"))
+					numPos += Double.parseDouble(argsFile[6]);
 			}
 			outFileAll.println(numPos);
 			numPos = 0;
 
 			inFileExpTable.close();
 			
-			break;
+			//break;
 
 		}
 		
