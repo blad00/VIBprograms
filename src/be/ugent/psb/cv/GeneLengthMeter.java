@@ -25,6 +25,7 @@ D:\DanielVIB\Maize\reMapV3\atLeast1Samples\CVsent\AdditionalAnalyses\zea_mays.b7
 				PrintWriter outFile = new PrintWriter(new FileOutputStream(fileIn+".length"))){
 			
 			HashMap<String, Integer> mapFullLenght = getLengthMapCDS(annotFile);
+			//HashMap<String, Integer> mapFullLenght = getLengthMap(annotFile);
 			
 			while ((str = inFile.readLine()) != null) {
 				
