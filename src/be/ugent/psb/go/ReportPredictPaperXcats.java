@@ -79,7 +79,7 @@ this program take a input list with a division of GO categories, to create a fil
 			inFileDivGoCats = new BufferedReader(new FileReader(divGOfile));
 			while ((str = inFileDivGoCats.readLine()) != null) {
 				arFi = str.split("\t");
-				if(arFi[0].equals("Cat")) {
+				if(arFi[0].equals("GO ID")) {
 					if(outFilePaper!=null)
 						outFilePaper.close();
 					
