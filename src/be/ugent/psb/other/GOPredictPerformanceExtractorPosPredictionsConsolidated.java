@@ -38,8 +38,8 @@ public class GOPredictPerformanceExtractorPosPredictionsConsolidated {
 
 		String splitLine [];
 		String str;
-		String posVals [] = null;
-		String sumPosVals [] = null;
+		
+		int sumPosVals [] = null;
 
 
 		
@@ -63,8 +63,8 @@ public class GOPredictPerformanceExtractorPosPredictionsConsolidated {
 
 			for (int i=0;i<listFiles.size();i++) {
 				
-				posVals = new String[10];
-				sumPosVals = new String[10];
+				
+				sumPosVals = new int[10];
 				filename = listFiles.get(i).getAbsolutePath();
 				onlyname = listFiles.get(i).getName().split("\\.")[0];
 
@@ -75,20 +75,18 @@ public class GOPredictPerformanceExtractorPosPredictionsConsolidated {
 						
 						//add values into arrays to operate them
 						for(int o=0;o<10;o++){
-							posVals[o]=splitLine[o+6];
+							sumPosVals[o]=sumPosVals[o]+Integer.parseInt(splitLine[o+6]);
 						}
-
-						//print POSTIVES 
-						outFilePOS.print(onlyname);
-						for (String cpos : posVals) {
-							outFilePOS.print("\t"+cpos);	
-						}
-						outFilePOS.println();
-
-							
-
+						
 					}
 				}
+				
+				//print POSTIVES as a line
+				outFilePOS.print(onlyname);
+				for (int cpos : sumPosVals) {
+					outFilePOS.print("\t"+cpos);	
+				}
+				outFilePOS.println();
 
 			}
 		}catch (Exception e) {
