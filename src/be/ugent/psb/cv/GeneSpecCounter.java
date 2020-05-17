@@ -9,9 +9,14 @@ import java.util.HashMap;
 public class GeneSpecCounter {
 	
 	/*
-	 * This program search in the full genome annotation a list of gene, to count all their specifications
-	 * D:\DanielVIB\Maize\reMapV3\atLeast1Samples\CVsent\AdditionalAnalyses\HIGHcv.tsv
-D:\DanielVIB\maizeEnrich\superAnnotV3\zea_mays.b73.version3.all_transcripts.all_features.gff3 
+	 * This program search in the full genome annotation a list of gene, to count all their specifications such as exoms, intron, nRNA etc
+input:
+path\LOWcv_raw.tsv
+output:
+path\zea_mays.b73.version3.all_transcripts.all_features.gff3
+output:
+path\LOWcv_raw.tsv.specs
+
 	 */
 
 	public static void main(String[] args) {

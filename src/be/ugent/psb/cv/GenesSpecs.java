@@ -1,6 +1,9 @@
 package be.ugent.psb.cv;
 
 public class GenesSpecs {
+	/*
+	 * logical class to store genomic properties
+	 */
 
 	private String geneName;
 	private int mrnas;

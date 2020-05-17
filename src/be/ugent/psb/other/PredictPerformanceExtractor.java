@@ -16,6 +16,7 @@ public class PredictPerformanceExtractor {
 	/**
 	 * This program will take the performance output from PINGO agronomics.PrecisionRecall and creates 3 files per network, precition. recal and Fmeasure
 	 * @param args
+	 input:
 	 * arg 0 folder with the *_globalf.txt files
 	 * arg 1 output prefix
 

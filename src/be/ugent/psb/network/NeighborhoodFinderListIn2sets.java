@@ -20,18 +20,14 @@ import org.jgrapht.graph.SimpleGraph;
 
 /*
  * Program to load a network and get the neighbors of specific nodes, but also counts the number of coincidences in 2 sets 
- * args 0 network file
- * args 1 output file1
- * args 2 output file2
- * args 3 interest list of nodes
- * args 4 first set to count
- * args 5 second set to count
- * /home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/PingoCheck/GraphStats/3GraphsUsed/CLR_0.001EnigmaFormatOnlyPos.txt
-/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/atLeast1Samples/01ManW_CV/AdditionalAnalyses/HVG_TFs.Nei
-/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/atLeast1Samples/01ManW_CV/AdditionalAnalyses/LVG_TFs.Nei
-/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/atLeast1Samples/01ManW_CV/AdditionalAnalyses/TF3_V3_MergedPLAZA_ENIformat.tsv
-/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/atLeast1Samples/01ManW_CV/AdditionalAnalyses/HIGHcv.tsv
-/home/dfcruz/Midas/biocomp/groups/group_esb/dacru/Maize/reMapV3/atLeast1Samples/01ManW_CV/AdditionalAnalyses/LOWcv.tsv
+ * input:
+ * args 0 network file SAC_Pearson_MaizeNetwork.tsv
+ * args 1 output file1 HVG_TFsGene_raw.Sac
+ * args 2 output file2 LVG_TFsGene_raw.Sac
+ * args 3 interest list of nodes TF3_V3_MergedPLAZA_ENIformat.tsv
+ * args 4 first set to count HIGHcv_raw.tsv
+ * args 5 second set to count LOWcv_raw.tsv
+
  */
 
 public class NeighborhoodFinderListIn2sets {

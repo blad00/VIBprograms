@@ -17,6 +17,7 @@ public class GOPredictPerformanceExtractorPosPredictions {
 	/**
 	 * This program will take the counts of positives predictions and will create a separated file for each category
 	 * @param args
+	 input:
 	 * arg 0 folder with the *POS files
 	 * arg 1 GO category
 	 */

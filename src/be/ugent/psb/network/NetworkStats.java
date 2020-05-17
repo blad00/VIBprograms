@@ -31,6 +31,7 @@ public class NetworkStats {
 	/*
 	 * Class that print stats of a folder with networks in Enigma format
 	 * 
+	 input:
 	 * args[0] = path with networks
 	 * args[1] = Annotation file
 	 * args[2] = outputfile

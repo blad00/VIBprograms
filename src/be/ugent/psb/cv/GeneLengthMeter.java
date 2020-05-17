@@ -10,8 +10,13 @@ import java.util.HashMap;
 public class GeneLengthMeter {
 /*
  * this program will find the genomic length of a list of genes in the GFF file
- * D:\DanielVIB\Maize\reMapV3\atLeast1Samples\CVsent\AdditionalAnalyses\LOWcv.tsv
-D:\DanielVIB\Maize\reMapV3\atLeast1Samples\CVsent\AdditionalAnalyses\zea_mays.b73.version3.longest_transcript.exon_features.gff3
+
+input:
+path\LOWcv_raw.tsv
+path\zea_mays.b73.version3.all_transcripts.all_features.gff3
+output:
+path\LOWcv_raw.tsv.length
+
  */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
