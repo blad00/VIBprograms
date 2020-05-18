@@ -60,8 +60,8 @@ public class NetworkCreator {
 					//check corr ths and only positives
 					
 					if(corr>=ths){
-						outFileEnigma.println(gene1+"\t"+gene2+"\t"+"+"+"\t"+"0");
-//						System.out.println(gene1+"\t"+gene2+"\t"+corr);
+//						outFileEnigma.println(gene1+"\t"+gene2+"\t"+"+"+"\t"+"0");
+						System.out.println(gene1+"\t"+gene2+"\t"+corr);
 					}
 
 				}
