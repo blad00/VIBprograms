@@ -74,7 +74,8 @@ public class GOPredictAllPositiveExtrac {
 						//check if pval is in which range
 						//it is accumulative
 						for(thres = threshold; thres > Math.pow(10,-11); thres/=10.0){
-							if(pval<=thres&&inAnnot==false)
+							//if(pval<=thres&&inAnnot==true)
+							if(pval<=thres)
 								sumPosVals[ind]=sumPosVals[ind]+1;
 							
 							ind++;
