@@ -41,7 +41,9 @@ public class GOPredictPerformanceExtractorPosPredictionsConsolidated {
 		
 		int sumPosVals [] = null;
 
-
+		int indexOfDecimal = 0;
+		
+		int curNum = 0;
 		
 			
 				
@@ -75,7 +77,13 @@ public class GOPredictPerformanceExtractorPosPredictionsConsolidated {
 						
 						//add values into arrays to operate them
 						for(int o=0;o<10;o++){
-							sumPosVals[o]=sumPosVals[o]+Integer.parseInt(splitLine[o+6]);
+							if(splitLine[o+6].equals("NaN")){
+								curNum = 0;
+							}else{
+								indexOfDecimal = splitLine[o+6].indexOf(".");
+								curNum = Integer.parseInt(splitLine[o+6].substring(0,indexOfDecimal));
+								sumPosVals[o]=sumPosVals[o]+curNum;
+							}
 						}
 						
 					}
