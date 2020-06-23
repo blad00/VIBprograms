@@ -7,6 +7,12 @@ public class PearsonCoresult {
 	private double corr;
 	
 	
+	public PearsonCoresult(String gene1, String gene2, double corr) {
+		super();
+		this.gene1 = gene1;
+		this.gene2 = gene2;
+		this.corr = corr;
+	}
 	public String getGene1() {
 		return gene1;
 	}

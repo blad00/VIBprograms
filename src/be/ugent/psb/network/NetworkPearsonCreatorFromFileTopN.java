@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 //import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
@@ -17,7 +18,8 @@ public class NetworkPearsonCreatorFromFileTopN {
 	 * loading the network file name,  
 	 * arg 0 input file path for Expression matrices file with thresholds
 	 * arg 1 input folder with matrices
-	 * arg 1 output path
+	 * arg 2 output path
+	 * arg 3 number of edges
 	 */
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		// TODO Auto-generated method stub
@@ -26,6 +28,7 @@ public class NetworkPearsonCreatorFromFileTopN {
 		String amatFile = null;
 		String inputPath = args[1];
 		String outputPath = args[2];
+		int n = Integer.parseInt(args[3]);
 
 		//		Set <String> pairs = new TreeSet<String>();
 		double[] exp1;
@@ -41,7 +44,8 @@ public class NetworkPearsonCreatorFromFileTopN {
 		
 		ArrayList<PearsonCoresult> allRes = new ArrayList<>(); 
 		
-
+		PearsonCoresult peco = null;
+		
 		//save header
 		try(BufferedReader matricesFile = new BufferedReader(new FileReader(matsFile))){
 			//skip header 
@@ -79,12 +83,23 @@ public class NetworkPearsonCreatorFromFileTopN {
 						//check corr ths and only positives
 						if(corr>=pcoe){
 							
+							peco = new PearsonCoresult(gene1, gene2, corr);
+							allRes.add(peco);
+														
 							//outFileEnigma.println(gene1+"\t"+gene2+"\t"+"+"+"\t"+"0");
 							//outFileEnigma.println(gene1+"\t"+gene2+"\t"+"+"+"\t"+corr);
 							//System.out.println(gene1+"\t"+gene2+"\t"+corr);
 						}
 
 					}
+				}
+				
+				allRes.sort(Comparator.comparing(PearsonCoresult::getCorr).reversed());
+				
+				for (i=0;i<n&&i<allRes.size();i++) {
+					peco = allRes.get(i);
+					//outFileEnigma.println(peco.getGene1()+"\t"+peco.getGene2()+"\t"+"+"+"\t"+peco.getCorr());
+					outFileEnigma.println(peco.getGene1()+"\t"+peco.getGene2()+"\t"+"+"+"\t"+0);
 				}
 				
 				outFileEnigma.close();
