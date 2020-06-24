@@ -20,6 +20,7 @@ public class NetworkPearsonCreatorFromFileTopN {
 	 * arg 1 input folder with matrices
 	 * arg 2 output path
 	 * arg 3 number of edges
+	 * arg 4 print corrs: true or false
 	 */
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		// TODO Auto-generated method stub
@@ -29,6 +30,7 @@ public class NetworkPearsonCreatorFromFileTopN {
 		String inputPath = args[1];
 		String outputPath = args[2];
 		int n = Integer.parseInt(args[3]);
+		boolean printCor = Boolean.parseBoolean(args[4]);
 
 		//		Set <String> pairs = new TreeSet<String>();
 		double[] exp1;
@@ -52,7 +54,8 @@ public class NetworkPearsonCreatorFromFileTopN {
 			matricesFile.readLine();
 
 			while ((str = matricesFile.readLine()) != null) {
-
+				
+				allRes = new ArrayList<>();
 				
 				gene1 = null;
 				gene2 = null;
@@ -98,8 +101,10 @@ public class NetworkPearsonCreatorFromFileTopN {
 				
 				for (i=0;i<n&&i<allRes.size();i++) {
 					peco = allRes.get(i);
-					//outFileEnigma.println(peco.getGene1()+"\t"+peco.getGene2()+"\t"+"+"+"\t"+peco.getCorr());
-					outFileEnigma.println(peco.getGene1()+"\t"+peco.getGene2()+"\t"+"+"+"\t"+0);
+					if(printCor)
+						outFileEnigma.println(peco.getGene1()+"\t"+peco.getGene2()+"\t"+"+"+"\t"+peco.getCorr());
+					else
+						outFileEnigma.println(peco.getGene1()+"\t"+peco.getGene2()+"\t"+"+"+"\t"+0);
 				}
 				
 				outFileEnigma.close();
