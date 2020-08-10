@@ -25,16 +25,20 @@ path\LOWcv_raw.tsv.length
 		String str;
 		
 		int curLength;
+		String gene;
 		
 		try(BufferedReader inFile = new BufferedReader(new FileReader(fileIn));
 				PrintWriter outFile = new PrintWriter(new FileOutputStream(fileIn+".length"))){
 			
-			HashMap<String, Integer> mapFullLenght = getLengthMapCDS(annotFile);
-			//HashMap<String, Integer> mapFullLenght = getLengthMap(annotFile);
+			//HashMap<String, Integer> mapFullLenght = getLengthMapCDS(annotFile);
+			HashMap<String, Integer> mapFullLenght = getLengthMap(annotFile);
+			
+			//skip head
+			inFile.readLine();
 			
 			while ((str = inFile.readLine()) != null) {
-				
-				curLength = mapFullLenght.get(str);
+				gene = str.split("\t")[0];
+				curLength = mapFullLenght.get(gene);
 				outFile.println(str+"\t"+curLength);
 				
 			}
