@@ -21,6 +21,7 @@ public class GOPredictAllPositiveExtrac {
 		// TODO Auto-generated method stub
 		String inFolder = args[0];
 		String outFile = args[1];
+		int whi = Integer.parseInt(args[2]);//for deciding which one to use 0=all,1=true,2=false
 		String filename;
 		String onlyname;
 
@@ -74,9 +75,24 @@ public class GOPredictAllPositiveExtrac {
 						//check if pval is in which range
 						//it is accumulative
 						for(thres = threshold; thres > Math.pow(10,-11); thres/=10.0){
+							switch (whi){
+								case 0:
+									if(pval<=thres)
+										sumPosVals[ind]=sumPosVals[ind]+1;
+									break;
+								case 1:
+									if(pval<=thres&&inAnnot==true)
+										sumPosVals[ind]=sumPosVals[ind]+1;
+									break;
+								case 2:
+									if(pval<=thres&&inAnnot==false)
+										sumPosVals[ind]=sumPosVals[ind]+1;
+									break;
+							}
+							
 							//if(pval<=thres&&inAnnot==true)
-							if(pval<=thres)
-								sumPosVals[ind]=sumPosVals[ind]+1;
+//							if(pval<=thres)
+//								sumPosVals[ind]=sumPosVals[ind]+1;
 							
 							ind++;
 						}
