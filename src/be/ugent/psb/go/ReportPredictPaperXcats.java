@@ -47,8 +47,8 @@ this program take a input list with a division of GO categories, to create a fil
 		String targetGO_ID;
 		String predGO_ID;
 		String predGO_Name;
-		String semSim;
-		String clr_Pval;
+		//String semSim;
+		String pval;
 		String currentAnnot;
 		String onlyName = null;
 		
@@ -103,22 +103,22 @@ this program take a input list with a division of GO categories, to create a fil
 					//check if is not empty prediction
 					if(arFi[1].equals("NA"))
 						break;
-					
+					//Modified for No SemSim
 					//get gene name
-					geneName = arFi[1];
+					geneName = arFi[0];
 					//get pred info
-					predGO_ID = arFi[2];
-					predGO_Name = arFi[3];
+					predGO_ID = arFi[1];
+					predGO_Name = arFi[2];
 					//semantic similarity
-					semSim = arFi[0];
+					//semSim = arFi[0];
 					//pval
-					clr_Pval = arFi[4];
-					if(arFi.length==9)
-						currentAnnot = arFi[8];
+					pval = arFi[3];
+					if(arFi.length==8)
+						currentAnnot = arFi[7];
 					else
 						currentAnnot = null;
 					
-					outFilePaper.println(cuGoCatCod+"\t"+cuGoCatName+"\t"+geneName+"\t"+predGO_ID+"\t"+predGO_Name+"\t"+clr_Pval+"\t"+currentAnnot);
+					outFilePaper.println(cuGoCatCod+"\t"+cuGoCatName+"\t"+geneName+"\t"+predGO_ID+"\t"+predGO_Name+"\t"+pval+"\t"+currentAnnot);
 					
 				}
 				inFileExpTable.close();
