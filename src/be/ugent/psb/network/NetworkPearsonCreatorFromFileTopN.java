@@ -21,6 +21,7 @@ public class NetworkPearsonCreatorFromFileTopN {
 	 * arg 2 output path
 	 * arg 3 number of edges
 	 * arg 4 print corrs: true or false
+	 * arg 5 Blank column: true or false
 	 */
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		// TODO Auto-generated method stub
@@ -31,6 +32,7 @@ public class NetworkPearsonCreatorFromFileTopN {
 		String outputPath = args[2];
 		int n = Integer.parseInt(args[3]);
 		boolean printCor = Boolean.parseBoolean(args[4]);
+		boolean blankCol = Boolean.parseBoolean(args[5]);
 
 		//		Set <String> pairs = new TreeSet<String>();
 		double[] exp1;
@@ -70,7 +72,7 @@ public class NetworkPearsonCreatorFromFileTopN {
 				ArrayList <String> geneNames = getGeneNameList(inputPath+amatFile);
 
 				//load all expression
-				HashMap<String,double[]> mapExp = getAllGeneExp(inputPath+amatFile);
+				HashMap<String,double[]> mapExp = getAllGeneExp(inputPath+amatFile,blankCol);
 
 				PrintWriter outFileEnigma = new PrintWriter(new FileOutputStream(outputPath+amatFile+".ENI"));
 				outFileEnigma.println("Gene_1"+"\t"+"Gene_2"+"\t"+"PosNeg"+"\t"+"P-value");
@@ -113,7 +115,7 @@ public class NetworkPearsonCreatorFromFileTopN {
 
 	}
 
-	public static HashMap<String,double[]> getAllGeneExp(String expFile) throws FileNotFoundException, IOException{
+	public static HashMap<String,double[]> getAllGeneExp(String expFile, boolean blankCol) throws FileNotFoundException, IOException{
 		String str;
 		String geneName;
 		String[] ar;
@@ -131,9 +133,16 @@ public class NetworkPearsonCreatorFromFileTopN {
 				geneName = ar[0];
 				arExp = new double[ar.length-1];
 				//get only the expression
-				for(int i=1;i<ar.length;i++){
-					arExp[i-1]=Double.parseDouble(ar[i]);
+				if(blankCol) {
+					for(int i=2;i<ar.length;i++){
+						arExp[i-1]=Double.parseDouble(ar[i]);
+					}
+				}else {
+					for(int i=1;i<ar.length;i++){
+						arExp[i-1]=Double.parseDouble(ar[i]);
+					}
 				}
+				
 				mapGeneExp.put(geneName, arExp);
 			}
 		}
