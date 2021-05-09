@@ -23,6 +23,13 @@ import org.jgrapht.graph.SimpleGraph;
  * args 2 interest list of nodes
  */
 
+/** last from maize project
+D:\DanielVIB\Maize\Graphs\SAC2_Pearson_MaizeNetwork.tsv
+D:\DanielVIB\Maize\reMapV3\atLeast1Samples\CVsent\CV_norm_2020_Aug\LOWcv_normCount.tsv
+D:\DanielVIB\Maize\reMapV3\atLeast1Samples\CVsent\CV_norm_2020_Aug\LOWcv_norm.tsv
+ * 
+ */
+
 public class NeighborhoodFinderListCount {
 
 	public static void main(String[] args) {
@@ -42,7 +49,10 @@ public class NeighborhoodFinderListCount {
 			Set <String> vertexList = network.vertexSet();
 			String genetf;
 			//header
-			outFile.println("gene"+"\t"+"counLinks");
+			outFile.println("gene"+"\t"+"countLinks");
+			//skip header
+			inListFile.readLine();
+			
 			while ((str = inListFile.readLine()) != null) {
 				//because it is in enigma format 2 columns
 				arile = str.split("\t");
@@ -141,3 +151,6 @@ public class NeighborhoodFinderListCount {
 	}
 
 }
+
+
+

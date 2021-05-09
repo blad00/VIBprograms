@@ -11,12 +11,13 @@ import java.util.HashMap;
 
 //import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 
-public class NetworkCreator {
+public class NetworkCreator4GeneList {
 	/*
-	 * This program loads an expression matrix and based on a correlation threshold will output the Enigma format network only positive relationships 
+	 * This program loads an expression matrix and based on a correlation threshold will output the Enigma format network. Only take into account the genes from the input list 
 	 * arg 0 input Expression matrix
 	 * arg 1 threshold
 	 * arg 2 output network
+	 * arg 3 list of genes
 	 */
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		// TODO Auto-generated method stub
@@ -24,6 +25,7 @@ public class NetworkCreator {
 		String amatFile = args[0];
 		double ths = Double.parseDouble(args[1]);
 		String outputFile = args[2];
+		String listFile = args[3];
 
 //		Set <String> pairs = new TreeSet<String>();
 		double[] exp1;
@@ -33,7 +35,7 @@ public class NetworkCreator {
 		//save header
 
 
-		try(PrintWriter outFileEnigma = new PrintWriter(new FileOutputStream(outputFile+".ENI"))){
+		try(PrintWriter outFileEnigma = new PrintWriter(new FileOutputStream(outputFile));BufferedReader inListFile = new BufferedReader(new FileReader(listFile))){
 
 			//load all gene names to iterate
 			ArrayList <String> geneNames = getGeneNameList(amatFile);
@@ -41,29 +43,42 @@ public class NetworkCreator {
 			//load all expression
 			HashMap<String,double[]> mapExp = getAllGeneExp(amatFile);
 
-			double val;
+
 			outFileEnigma.println("Gene_1"+"\t"+"Gene_2"+"\t"+"PosNeg"+"\t"+"P-value");
 			String gene1;
 			String gene2;
 			int i,j=0;
+			String str;
+			String[] ar;
+			//skip header
+			inListFile.readLine();
 			
-//			PearsonsCorrelation pecor = new PearsonsCorrelation();
+			while ((str = inListFile.readLine()) != null) {
 
-			for(i=0;i<geneNames.size();i++){
-				gene1 = geneNames.get(i);
+				ar = str.split("\t");
+				gene1 = ar[0];
 				exp1 = mapExp.get(gene1);
-				for(j=i+1;j<geneNames.size();j++){
+				
+				if(!check0(exp1))
+					continue;
+				
+				for(j=1;j<geneNames.size();j++){
 					gene2 = geneNames.get(j);
 					exp2 = mapExp.get(gene2);
-					corr = pearsonCorrelation(exp1, exp2);
-//					corr = pecor.correlation(exp1, exp2);
-					//check corr ths and only positives
 					
-					if(corr>=ths){
+					if(gene1.equalsIgnoreCase(gene2)||!check0(exp2))
+						continue;
+					
+					corr = pearsonCorrelation(exp1, exp2);
+				
+//					if(corr>=ths){
+					if(corr>=0){
 //						outFileEnigma.println(gene1+"\t"+gene2+"\t"+"+"+"\t"+"0");
 						outFileEnigma.println(gene1+"\t"+gene2+"\t"+"+"+"\t"+corr);
-//						System.out.println(gene1+"\t"+gene2+"\t"+corr);
 					}
+//					if(corr<=(-1*ths)){
+//						outFileEnigma.println(gene1+"\t"+gene2+"\t"+"-"+"\t"+corr);
+//					}
 
 				}
 			}
@@ -83,22 +98,7 @@ public class NetworkCreator {
 			//skip header
 			exFile.readLine();
 
-		/*
-		 //ENIGMA expression files 
-			while ((str = exFile.readLine()) != null) {
-				ar = str.split("\t");
-				//get geneName
-				geneName = ar[0];
-				arExp = new double[ar.length-1];
-				//get only the expression
-				for(int i=1;i<ar.length;i++){
-					arExp[i-1]=Double.parseDouble(ar[i]);
-				}
-				mapGeneExp.put(geneName, arExp);
-			}
-		
-		*/
-			// Normal files
+
 			while ((str = exFile.readLine()) != null) {
 				ar = str.split("\t");
 				//get geneName
@@ -167,5 +167,15 @@ public class NetworkCreator {
 
 		// correlation is just a normalized covariation
 		return cov / sigmax / sigmay;
+	}
+	
+	public static boolean check0(double[] x) {
+		int num0=0;
+		
+		for(int i=0;i<x.length;i++) {
+			if(x[i]==0)
+				num0++;
+		}
+		return num0<10;
 	}
 }
